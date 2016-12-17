@@ -22,7 +22,7 @@ public class WinningCondition {
             GuiBattleShip.loadFromBoolean(Battleship.player1);
         }
         else if(foundp2==max&&!isP1) {
-        	JOptionPane.showMessageDialog(null, "Player 2 hat wins!");
+        	JOptionPane.showMessageDialog(null, "Player 2 wins!");
             GuiBattleShip.loadFromBoolean(Battleship.player2);
         }
 
