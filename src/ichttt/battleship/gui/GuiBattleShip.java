@@ -130,7 +130,7 @@ public class GuiBattleShip implements ActionListener {
         p1=true;
     }
     
-    private static void clearTextFormButtons() {
+    private static void clearTextFromButtons() {
         for(int i = 0; i< Battleship.verticalLength; i++) {
             for(int i2 = 0; i2< Battleship.horizontalLength; i2++) {
                 fields[i][i2].setText("");
@@ -150,7 +150,7 @@ public class GuiBattleShip implements ActionListener {
         }
     }
 
-    private static void battleSetAlreadyTried(boolean isP1) {
+    public static void battleSetAlreadyTried(boolean isP1) {
         for (int i = 0; i < Battleship.verticalLength; i++) {
             for (int i2 = 0; i2 < Battleship.horizontalLength; i2++) {
                 if(isP1) {
@@ -183,7 +183,7 @@ public class GuiBattleShip implements ActionListener {
 	}
 
     private static void clearTextButtons() {
-    	clearTextFormButtons();
+    	clearTextFromButtons();
         for(int i = 0; i< Battleship.verticalLength; i++) {
             for(int i2 = 0; i2< Battleship.horizontalLength; i2++) {
                 fields[i][i2].setBackground(null);

@@ -43,6 +43,7 @@ public class WinningCondition {
     
     
 	public static void checkShipDown(int curposx, int curposy, boolean isP1) {
+        //TODO something isn't working here
         boolean isDestroyed = true;
         int possibleShip;
         if(!isP1) {
@@ -59,8 +60,9 @@ public class WinningCondition {
 	            	}
 	            }
 	        }
-	        else
-	        	isDestroyed = false;
+	        else {
+                isDestroyed = false;
+            }
         }
         else {
         	possibleShip = getPossibleShip(Battleship.shipRowsP2, curposx, curposy);
@@ -76,8 +78,9 @@ public class WinningCondition {
 	            	}
 	            }
 	        }
-	        else
-	        	isDestroyed = false;
+	        else {
+                isDestroyed = false;
+            }
         }
         if(isDestroyed) {
         	JOptionPane.showMessageDialog(null, "Ship down!");

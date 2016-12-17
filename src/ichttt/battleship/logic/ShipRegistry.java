@@ -12,26 +12,22 @@ public class ShipRegistry {
     private static List<Integer> ShipList = new ArrayList<Integer>();
     private static boolean[] isPlaced;
     private static HitTable[] shipRows;//[Ship]
-    private static int posInternal = 0;
     private static int pos = -1;
 
     public static void stepPos(boolean reset) {
         if(!reset) {
             pos++;
             shipRows[pos].setAllPos(-1, -1);
-            posInternal=0;
         }
         else {
             pos = -1;
-            posInternal=0;
         }
     }
 
     public static void setShipRow(int y, int x) throws IllegalArgumentException, IndexOutOfBoundsException {
         if(!isClosed)
             throw new IllegalStateException("Cannot setShipRow when Registry is opened!");
-        shipRows[pos].setPos(x, y , posInternal);
-        posInternal++;
+        shipRows[pos].setPos(x, y);
     }
 
     public static void registerShip(int ship) throws IllegalStateException {
