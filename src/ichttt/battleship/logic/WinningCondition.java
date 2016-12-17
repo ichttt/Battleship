@@ -14,9 +14,9 @@ public class WinningCondition {
     public static int max;
     public static boolean checkShipDown = true;
 
-    public static void checkWin(int posx, int posy, boolean isP1) {
+    public static void checkWin(int posy, int posx, boolean isP1) {
         if(checkShipDown)
-    	    checkShipDown(posx, posy, isP1);
+    	    checkShipDown(posy, posx, isP1);
         if (foundp1 == max&&isP1) {
             JOptionPane.showMessageDialog(null, "Player 1 wins!");
             GuiBattleShip.loadFromBoolean(Battleship.player1);
@@ -29,7 +29,7 @@ public class WinningCondition {
     }
     
     
-    private static int getPossibleShip(HitTable shipRows[], int curposx, int curposy) {
+    private static int getPossibleShip(HitTable shipRows[], int curposy, int curposx) {
         for(int i1 = 0;i1<shipRows.length;i1++) {
             for(int i2 = 0;i2<shipRows[0].size();i2++) {
                 if(shipRows[i1].posy[i2]==curposy&&shipRows[i1].posx[i2]==curposx) {
@@ -42,12 +42,11 @@ public class WinningCondition {
     }
     
     
-	public static void checkShipDown(int curposx, int curposy, boolean isP1) {
-        //TODO something isn't working here
+	public static void checkShipDown(int curposy, int curposx, boolean isP1) {
         boolean isDestroyed = true;
         int possibleShip;
         if(!isP1) {
-        	possibleShip = getPossibleShip(Battleship.shipRowsP1, curposx, curposy);
+        	possibleShip = getPossibleShip(Battleship.shipRowsP1, curposy, curposx);
 	        if(possibleShip !=-1) {
 	            for(int i = 0; i< Battleship.shipRowsP1[possibleShip].size(); i++) {
 	            	if(Battleship.shipRowsP1[possibleShip].posx[i]==-1&& Battleship.shipRowsP1[possibleShip].posy[i]==-1)
@@ -65,7 +64,7 @@ public class WinningCondition {
             }
         }
         else {
-        	possibleShip = getPossibleShip(Battleship.shipRowsP2, curposx, curposy);
+        	possibleShip = getPossibleShip(Battleship.shipRowsP2, curposy, curposx);
 	        if(possibleShip !=-1) {
 	            for(int i = 0; i< Battleship.shipRowsP2[possibleShip].size(); i++) {
 	            	if(Battleship.shipRowsP2[possibleShip].posx[i]==-1&& Battleship.shipRowsP2[possibleShip].posy[i]==-1)
