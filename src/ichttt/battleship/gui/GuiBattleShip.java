@@ -346,7 +346,7 @@ public class GuiBattleShip implements ActionListener {
                             Battleship.player2hit[buttonNumber[0]][buttonNumber[1]] = "O";
                             p1=!p1;
                             fields[buttonNumber[0]][buttonNumber[1]].setBackground(new Color(175,0,0));
-                            JOptionPane.showMessageDialog(null, "No Hit! Player 2's turn!");
+                            JOptionPane.showMessageDialog(null, "No Hit! Player 1's turn!");
                             window.setTitle("Battleship - Player 1");
                             clearTextButtons();
                             battleSetAlreadyTried(p1);
