@@ -15,8 +15,16 @@ public class WinningCondition {
     public static boolean checkShipDown = true;
 
     public static void checkWin(int posy, int posx, boolean isP1) {
-        if(checkShipDown)
-    	    checkShipDown(posy, posx, isP1);
+        if(checkShipDown) {
+            if(isP1) {
+                if(checkShipDown(getPossibleShip(Battleship.shipRowsP2, posy, posx), Battleship.shipRowsP2, Battleship.player1hit))
+                    JOptionPane.showMessageDialog(null, "Ship down!");
+            }
+            else {
+                if(checkShipDown(getPossibleShip(Battleship.shipRowsP1, posy, posx), Battleship.shipRowsP1, Battleship.player2hit))
+                    JOptionPane.showMessageDialog(null, "Ship down!");
+            }
+        }
         if (foundp1 == max&&isP1) {
             JOptionPane.showMessageDialog(null, "Player 1 wins!");
             GuiBattleShip.loadFromBoolean(Battleship.player1);
@@ -40,49 +48,23 @@ public class WinningCondition {
         }
         return -1;
     }
-    
-    
-	public static void checkShipDown(int curposy, int curposx, boolean isP1) {
-        boolean isDestroyed = true;
-        int possibleShip;
-        if(!isP1) {
-        	possibleShip = getPossibleShip(Battleship.shipRowsP1, curposy, curposx);
-	        if(possibleShip !=-1) {
-	            for(int i = 0; i< Battleship.shipRowsP1[possibleShip].size(); i++) {
-	            	if(Battleship.shipRowsP1[possibleShip].posx[i]==-1&& Battleship.shipRowsP1[possibleShip].posy[i]==-1)
-	            		break;
-	            	if(Battleship.player2hit[Battleship.shipRowsP1[possibleShip].posy[i]][Battleship.shipRowsP1[possibleShip].posx[i]]==null||
-	            		Battleship.player2hit[Battleship.shipRowsP1[possibleShip].posy[i]][Battleship.shipRowsP1[possibleShip].posx[i]].equals("O")) {
-						isDestroyed = false;
-						System.out.println("Ship candidate invalid because of " + Battleship.shipRowsP1[possibleShip].posx[i] +" Y "+ Battleship.shipRowsP1[possibleShip].posy[i]);
-						break;
-	            	}
-	            }
-	        }
-	        else {
-                isDestroyed = false;
+
+    public static boolean checkShipDown(int possibleShip, HitTable[] shipRows, String[][] playerhit) {
+        if(possibleShip !=-1) {
+            for(int i = 0; i< shipRows[possibleShip].size(); i++) {
+                if(shipRows[possibleShip].posx[i]==-1&& shipRows[possibleShip].posy[i]==-1)
+                    break;
+                if(playerhit[shipRows[possibleShip].posy[i]][shipRows[possibleShip].posx[i]]==null||
+                        playerhit[shipRows[possibleShip].posy[i]][shipRows[possibleShip].posx[i]].equals("O")) {
+                    System.out.println("Ship candidate invalid because of " + shipRows[possibleShip].posx[i] +" Y "+ shipRows[possibleShip].posy[i]);
+                    return false;
+                }
             }
         }
         else {
-        	possibleShip = getPossibleShip(Battleship.shipRowsP2, curposy, curposx);
-	        if(possibleShip !=-1) {
-	            for(int i = 0; i< Battleship.shipRowsP2[possibleShip].size(); i++) {
-	            	if(Battleship.shipRowsP2[possibleShip].posx[i]==-1&& Battleship.shipRowsP2[possibleShip].posy[i]==-1)
-	            		break;
-	            	if(Battleship.player1hit[Battleship.shipRowsP2[possibleShip].posy[i]][Battleship.shipRowsP2[possibleShip].posx[i]]==null||
-	            		Battleship.player1hit[Battleship.shipRowsP2[possibleShip].posy[i]][Battleship.shipRowsP2[possibleShip].posx[i]].equals("O")) {
-						isDestroyed = false;
-						System.out.println("Ship candiate invalid because of " + Battleship.shipRowsP2[possibleShip].posx[i] +" Y "+ Battleship.shipRowsP2[possibleShip].posy[i]);
-						break;
-	            	}
-	            }
-	        }
-	        else {
-                isDestroyed = false;
-            }
+            return false;
         }
-        if(isDestroyed) {
-        	JOptionPane.showMessageDialog(null, "Ship down!");
-        }
-	}
+        return true;
+    }
+
 }
