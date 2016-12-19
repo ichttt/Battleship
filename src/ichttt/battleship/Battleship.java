@@ -24,7 +24,9 @@ public class Battleship implements Thread.UncaughtExceptionHandler{
     public static void main(String[] args) {
     	Thread.setDefaultUncaughtExceptionHandler(new Battleship());
         Settings settings = new Settings();
+        //Disable this command and uncomment the other two lines if you can't compile the Settings.form
         settings.createUIComponents();
+//        ShipRegistry.registerShip(new int[]{2,3,4,5});
 //        GuiBattleShip.initPlacementGui();
     }
 
