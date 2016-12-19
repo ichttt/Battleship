@@ -19,7 +19,6 @@ public class Battleship implements Thread.UncaughtExceptionHandler{
     //X=Hit;O=No hit;null= not tested
     public static String[][] player1hit = new String[verticalLength][horizontalLength];
     public static String[][] player2hit = new String[verticalLength][horizontalLength];
-    //TODO
     public static HitTable[] shipRowsP1;
     public static HitTable[] shipRowsP2;
     public static void main(String[] args) {

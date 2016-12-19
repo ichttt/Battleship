@@ -18,13 +18,9 @@ public class BlockStatusHandler {
 
     protected static void blockStatus(boolean status, int exclude, boolean isX) {
         for(int i = 0; i< Battleship.verticalLength; i++) {
-            if(isX&&i==exclude) {
-            }
-            else {
+            if(!isX||i!=exclude) {
                 for (int i2 = 0; i2 < Battleship.horizontalLength; i2++) {
-                    if (!isX && i2 == exclude) {
-
-                    } else
+                    if (isX || i2 != exclude)
                         GuiBattleShip.fields[i][i2].setEnabled(!status);
                 }
             }
@@ -34,10 +30,7 @@ public class BlockStatusHandler {
     protected static void blockStatus(boolean status, boolean excludeUsed) {
         for(int i = 0; i< Battleship.verticalLength; i++) {
             for(int i2 = 0; i2< Battleship.horizontalLength; i2++) {
-                if(GuiBattleShip.fields[i][i2].getText().equals("X")&&excludeUsed) {
-
-                }
-                else
+                if(!GuiBattleShip.fields[i][i2].getText().equals("X")||!excludeUsed)
                     GuiBattleShip.fields[i][i2].setEnabled(!status);
             }
         }
