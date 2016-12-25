@@ -14,7 +14,7 @@ public class WinningCondition {
     public static int max;
     public static boolean checkShipDown = true;
 
-    public static void checkWin(int posy, int posx, boolean isP1) {
+    public static void checkWin(int posx, int posy, boolean isP1) {
         if(checkShipDown) {
             if(isP1) {
                 if(checkShipDown(getPossibleShip(Battleship.shipRowsP2, posy, posx), Battleship.shipRowsP2, Battleship.player1hit))
@@ -49,7 +49,7 @@ public class WinningCondition {
         return -1;
     }
 
-    public static boolean checkShipDown(int possibleShip, HitTable[] shipRows, String[][] playerhit) {
+    private static boolean checkShipDown(int possibleShip, HitTable[] shipRows, String[][] playerhit) {
         if(possibleShip !=-1) {
             for(int i = 0; i< shipRows[possibleShip].size(); i++) {
                 if(shipRows[possibleShip].posx[i]==-1&& shipRows[possibleShip].posy[i]==-1)

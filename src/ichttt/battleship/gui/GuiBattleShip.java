@@ -150,7 +150,7 @@ public class GuiBattleShip implements ActionListener {
         }
     }
 
-    public static void battleSetAlreadyTried(boolean isP1) {
+    private static void battleSetAlreadyTried(boolean isP1) {
         for (int i = 0; i < Battleship.verticalLength; i++) {
             for (int i2 = 0; i2 < Battleship.horizontalLength; i2++) {
                 if(isP1) {
@@ -197,11 +197,10 @@ public class GuiBattleShip implements ActionListener {
             ShipRegistry.reopenRegistry(true);
         isPlacing = true;
         p1 = true;
-        BlockStatusHandler.blockingX.clear();
-        BlockStatusHandler.blockingY.clear();
+        BlockStatusHandler.clearBlockList();
         Battleship.player1hit = new String[Battleship.verticalLength][Battleship.horizontalLength];
         Battleship.player2hit = new String[Battleship.verticalLength][Battleship.horizontalLength];
-        BlockStatusHandler.blockStatus(false, false);
+        BlockStatusHandler.changeBlockStatus(false, false);
         clearTextButtons();
         WinningCondition.foundp2 = 0;
         WinningCondition.foundp1 = 0;
@@ -262,7 +261,6 @@ public class GuiBattleShip implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent event) {
     	String[] buttonString;
-    	int[] buttonNumber = new int[2];
         switch(event.getActionCommand()) {
             case "exit":
                 System.exit(0);
@@ -277,56 +275,56 @@ public class GuiBattleShip implements ActionListener {
                 break;
             default:
                 buttonString = event.getActionCommand().split(" ");
-                for(int i = 0;i<2;i++)
-                    buttonNumber[i] = Integer.parseInt(buttonString[i]);
+                int posx = Integer.parseInt(buttonString[1]);
+                int posy = Integer.parseInt(buttonString[0]);
                 if(isPlacing) {
-                    fields[buttonNumber[0]][buttonNumber[1]].setText("X");
-                    fields[buttonNumber[0]][buttonNumber[1]].setEnabled(false);
+                    fields[posy][posx].setText("X");
+                    fields[posy][posx].setEnabled(false);
                     //Set color
                     if (color == null) {
                         Random rdm = new Random();
                         color = new Color(rdm.nextInt(255), rdm.nextInt(255), rdm.nextInt(255));
                     }
-                    fields[buttonNumber[0]][buttonNumber[1]].setBackground(color);
-                    ShipRegistry.setShipRow(buttonNumber[0], buttonNumber[1]);
+                    fields[posy][posx].setBackground(color);
+                    ShipRegistry.setShipRow(posx, posy);
+                    System.out.println("X:" + posx + "Y:" + posy );
                     //New ship
                     if (desiredLength == currentLength) {
                         currentLength = 1;
-                        BlockStatusHandler.blockingX.clear();
-                        BlockStatusHandler.blockingY.clear();
-                        BlockStatusHandler.blockStatus(false, true);
+                        BlockStatusHandler.clearBlockList();
+                        BlockStatusHandler.changeBlockStatus(false, true);
                         chooseShipGui(ShipRegistry.getShipList());
                     }
                     //Continue ship
                     else {
-                        if (BlockStatusHandler.blockingX.size() == 0) {
-                            previousX = buttonNumber[0];
-                            BlockStatusHandler.blockFields(buttonNumber[0], buttonNumber[1]);
-                        } else if (previousX == buttonNumber[0]) {
-                            BlockStatusHandler.blockStatus(true, buttonNumber[0], true);
-                            BlockStatusHandler.blockFieldsOnDirection(buttonNumber[0], buttonNumber[1], false);
+                        if (BlockStatusHandler.getSize() == 0) {
+                            previousX = posx;
+                            BlockStatusHandler.unblockFieldsAround(posx, posy);
+                        } else if (previousX == posx) {
+                            BlockStatusHandler.changeBlockStatus(true, posx, true);
+                            BlockStatusHandler.blockFieldsOnDirection(posx, posy, false);
                         } else {
-                            BlockStatusHandler.blockStatus(true, buttonNumber[1], false);
-                            BlockStatusHandler.blockFieldsOnDirection(buttonNumber[0], buttonNumber[1], true);
+                            BlockStatusHandler.changeBlockStatus(true, posy, false);
+                            BlockStatusHandler.blockFieldsOnDirection(posx, posy, true);
                         }
                         currentLength++;
                     }
                 }
                 else {
-                    fields[buttonNumber[0]][buttonNumber[1]].setEnabled(false);
+                    fields[posy][posx].setEnabled(false);
                     if(p1) {
-                        if(Battleship.player2[buttonNumber[0]][buttonNumber[1]]) {
-                            fields[buttonNumber[0]][buttonNumber[1]].setText("X");
-                            Battleship.player1hit[buttonNumber[0]] [buttonNumber[1]] = "X";
-                            fields[buttonNumber[0]][buttonNumber[1]].setBackground(new Color(0, 255, 0));
+                        if(Battleship.player2[posy][posx]) {
+                            fields[posy][posx].setText("X");
+                            Battleship.player1hit[posy] [posx] = "X";
+                            fields[posy][posx].setBackground(new Color(0, 255, 0));
                             WinningCondition.foundp1++;
-                            WinningCondition.checkWin(buttonNumber[0], buttonNumber[1], p1);
+                            WinningCondition.checkWin(posx, posy, p1);
                         }
                         else {
-                            fields[buttonNumber[0]][buttonNumber[1]].setText("O");
-                            Battleship.player1hit[buttonNumber[0]] [buttonNumber[1]] = "O";
+                            fields[posy][posx].setText("O");
+                            Battleship.player1hit[posy] [posx] = "O";
                             p1=!p1;
-                            fields[buttonNumber[0]][buttonNumber[1]].setBackground(new Color(175,0,0));
+                            fields[posy][posx].setBackground(new Color(175,0,0));
                             JOptionPane.showMessageDialog(null, "No Hit! Player 2's turn!");
                             window.setTitle("Battleship - Player 2");
                             clearTextButtons();
@@ -334,18 +332,18 @@ public class GuiBattleShip implements ActionListener {
                         }
                     }
                     else {
-                        if(Battleship.player1[buttonNumber[0]][buttonNumber[1]]) {
-                            fields[buttonNumber[0]][buttonNumber[1]].setText("X");
-                            Battleship.player2hit[buttonNumber[0]][buttonNumber[1]] = "X";
-                            fields[buttonNumber[0]][buttonNumber[1]].setBackground(new Color(0, 255, 0));
+                        if(Battleship.player1[posy][posx]) {
+                            fields[posy][posx].setText("X");
+                            Battleship.player2hit[posy][posx] = "X";
+                            fields[posy][posx].setBackground(new Color(0, 255, 0));
                             WinningCondition.foundp2++;
-                            WinningCondition.checkWin(buttonNumber[0], buttonNumber[1], p1);
+                            WinningCondition.checkWin(posx, posy, p1);
                         }
                         else {
-                            fields[buttonNumber[0]][buttonNumber[1]].setText("O");
-                            Battleship.player2hit[buttonNumber[0]][buttonNumber[1]] = "O";
+                            fields[posy][posx].setText("O");
+                            Battleship.player2hit[posy][posx] = "O";
                             p1=!p1;
-                            fields[buttonNumber[0]][buttonNumber[1]].setBackground(new Color(175,0,0));
+                            fields[posy][posx].setBackground(new Color(175,0,0));
                             JOptionPane.showMessageDialog(null, "No Hit! Player 1's turn!");
                             window.setTitle("Battleship - Player 1");
                             clearTextButtons();

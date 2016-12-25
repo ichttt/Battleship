@@ -24,7 +24,7 @@ import java.util.Arrays;
 //}
 
 public class Settings implements ActionListener, KeyListener, ChangeListener, MouseListener {
-    private JDialog window;
+    private JFrame window;
     private JButton okButton;
 //    private JButton cancelButton;
     private JSlider SizeY;
@@ -91,12 +91,11 @@ public class Settings implements ActionListener, KeyListener, ChangeListener, Mo
         }
         registerListeners();
         ShipList.setModel(list);
-        window = new JDialog();
-        window.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        window = new JFrame();
+        window.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         window.add(SplitPane);
         window.pack();
         window.setTitle("Settings");
-        window.setModal(true);
         window.setResizable(false);
         window.setVisible(true);
     }
@@ -124,14 +123,14 @@ public class Settings implements ActionListener, KeyListener, ChangeListener, Mo
 //        }
 //    }
 
-    void onWindowClose(JDialog dialog) {
+    void onWindowClose(JFrame window) {
         //Since the list should be sorted, the last Value should be the largest one. Let's hope :D
         if(list.size()==0) {
-            JOptionPane.showMessageDialog(window, "The ship list must not be empty!", "Cannot continue", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this.window, "The ship list must not be empty!", "Cannot continue", JOptionPane.ERROR_MESSAGE);
             return;
         }
         if(SizeX.getValue() < list.get(list.size()-1)&& SizeY.getValue() < list.get(list.size()-1)) {
-            JOptionPane.showMessageDialog(window, "The registered Ships are larger then the Size of the field!", "Cannot continue", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this.window, "The registered Ships are larger then the Size of the field!", "Cannot continue", JOptionPane.ERROR_MESSAGE);
             return;
         }
         Battleship.horizontalLength = SizeX.getValue();
@@ -139,7 +138,7 @@ public class Settings implements ActionListener, KeyListener, ChangeListener, Mo
         for(int i = 0; i<list.size();i++) {
             ShipRegistry.registerShip(list.get(i));
         }
-        dialog.dispose();
+        window.dispose();
         GuiBattleShip.initPlacementGui();
     }
 
@@ -157,6 +156,7 @@ public class Settings implements ActionListener, KeyListener, ChangeListener, Mo
                 WinningCondition.checkShipDown = !WinningCondition.checkShipDown;
                 break;
             case "shipbyship":
+                BlockStatusHandler.shipByShip = !BlockStatusHandler.shipByShip;
                 JOptionPane.showMessageDialog(null, "Not implemented(yet)");
                 break;
             case "add":

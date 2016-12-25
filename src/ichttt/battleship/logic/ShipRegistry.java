@@ -24,7 +24,11 @@ public class ShipRegistry {
         }
     }
 
-    public static void setShipRow(int y, int x) throws IllegalArgumentException, IndexOutOfBoundsException {
+    public static int getPos() {
+        return pos;
+    }
+
+    public static void setShipRow(int x, int y) throws IllegalArgumentException, IndexOutOfBoundsException {
         if(!isClosed)
             throw new IllegalStateException("Cannot setShipRow when Registry is opened!");
         shipRows[pos].setPos(x, y);
