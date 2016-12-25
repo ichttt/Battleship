@@ -270,19 +270,14 @@ public class Settings implements ActionListener, KeyListener, ChangeListener, Mo
     //Unused Listeners
     @Override
     public void mousePressed(MouseEvent e) {}
-
     @Override
     public void mouseReleased(MouseEvent e) {}
-
     @Override
     public void mouseEntered(MouseEvent e) {}
-
     @Override
     public void mouseExited(MouseEvent e) {}
-
     @Override
     public void keyReleased(KeyEvent e) {}
-
     @Override
     public void keyTyped(KeyEvent event) {}
 }

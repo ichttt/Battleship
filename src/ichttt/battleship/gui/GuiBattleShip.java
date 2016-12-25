@@ -197,7 +197,7 @@ public class GuiBattleShip implements ActionListener {
             ShipRegistry.reopenRegistry(true);
         isPlacing = true;
         p1 = true;
-        BlockStatusHandler.clearBlockList();
+        BlockStatusHandler.clearEntireBlockList();
         Battleship.player1hit = new String[Battleship.verticalLength][Battleship.horizontalLength];
         Battleship.player2hit = new String[Battleship.verticalLength][Battleship.horizontalLength];
         BlockStatusHandler.changeBlockStatus(false, false);
@@ -280,10 +280,13 @@ public class GuiBattleShip implements ActionListener {
                 if(isPlacing) {
                     fields[posy][posx].setText("X");
                     fields[posy][posx].setEnabled(false);
+                    BlockStatusHandler.block(posx, posy);
+
                     //Set color
                     if (color == null) {
                         Random rdm = new Random();
-                        color = new Color(rdm.nextInt(255), rdm.nextInt(255), rdm.nextInt(255));
+                        //We add a minimum of 40 to ensure that our color isn't too dark
+                        color = new Color(rdm.nextInt(215)+40, rdm.nextInt(215)+40, rdm.nextInt(215)+40);
                     }
                     fields[posy][posx].setBackground(color);
                     ShipRegistry.setShipRow(posx, posy);
@@ -291,7 +294,7 @@ public class GuiBattleShip implements ActionListener {
                     //New ship
                     if (desiredLength == currentLength) {
                         currentLength = 1;
-                        BlockStatusHandler.clearBlockList();
+                        BlockStatusHandler.clearTempBlockList();
                         BlockStatusHandler.changeBlockStatus(false, true);
                         chooseShipGui(ShipRegistry.getShipList());
                     }
