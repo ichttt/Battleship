@@ -129,8 +129,17 @@ public class Settings implements ActionListener, KeyListener, ChangeListener, Mo
             JOptionPane.showMessageDialog(this.window, "The ship list must not be empty!", "Cannot continue", JOptionPane.ERROR_MESSAGE);
             return;
         }
+        //Check if the largest ship can fit the size
         if(SizeX.getValue() < list.get(list.size()-1)&& SizeY.getValue() < list.get(list.size()-1)) {
-            JOptionPane.showMessageDialog(this.window, "The registered Ships are larger then the Size of the field!", "Cannot continue", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this.window, "The registered ships are larger then the size of the field!", "Cannot continue", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        int blockCount = 0;
+        for(int i = 0;i<list.size();i++) {
+            blockCount += list.get(i);
+        }
+        if(blockCount>SizeX.getValue()*SizeY.getValue()) {
+            JOptionPane.showMessageDialog(this.window, "The registered ships do not fit on the field!", "Cannot continue", JOptionPane.ERROR_MESSAGE);
             return;
         }
         Battleship.horizontalLength = SizeX.getValue();
