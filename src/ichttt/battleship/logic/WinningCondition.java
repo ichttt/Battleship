@@ -30,18 +30,17 @@ public class WinningCondition {
             GuiBattleShip.loadFromBoolean(Battleship.player1);
         }
         else if(foundp2==max&&!isP1) {
-        	JOptionPane.showMessageDialog(null, "Player 2 wins!");
+            JOptionPane.showMessageDialog(null, "Player 2 wins!");
             GuiBattleShip.loadFromBoolean(Battleship.player2);
         }
-
     }
-    
-    
+
+
     private static int getPossibleShip(HitTable shipRows[], int curposy, int curposx) {
         for(int i1 = 0;i1<shipRows.length;i1++) {
             for(int i2 = 0;i2<shipRows[0].size();i2++) {
                 if(shipRows[i1].posy[i2]==curposy&&shipRows[i1].posx[i2]==curposx) {
-                	System.out.println("Found possible Ship at " + i1);
+                    System.out.println("Found possible Ship at " + i1);
                     return i1;
                 }
             }
@@ -66,5 +65,4 @@ public class WinningCondition {
         }
         return true;
     }
-
 }

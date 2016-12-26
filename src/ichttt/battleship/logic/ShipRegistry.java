@@ -8,7 +8,7 @@ import java.util.List;
  * Created by Tobias on 16.11.2016.
  */
 public class ShipRegistry {
-	private static boolean isClosed = false;
+    private static boolean isClosed = false;
     private static List<Integer> ShipList = new ArrayList<Integer>();
     private static boolean[] isPlaced;
     private static HitTable[] shipRows;//[Ship]
@@ -35,8 +35,8 @@ public class ShipRegistry {
     }
 
     public static void registerShip(int ship) throws IllegalStateException {
-    	if(!isClosed)
-    		ShipList.add(ship);
+        if(!isClosed)
+            ShipList.add(ship);
         else
             throw new IllegalStateException("Cannot add to registerShip when Registry is closed!");
     }
@@ -49,9 +49,9 @@ public class ShipRegistry {
     }
 
     public static void registerShip(int[] ships) throws IllegalStateException {
-    	if(!isClosed)
-	        for (int length : ships)
-	            ShipList.add(length);
+        if(!isClosed)
+            for (int length : ships)
+                ShipList.add(length);
         else
             throw new IllegalStateException("Cannot add to registerShip when Registry is closed!");
     }
@@ -84,20 +84,20 @@ public class ShipRegistry {
             output[i] = ShipList.get(i);
         return output;
     }
-	
-	public static void setPlaced(int pos) throws IllegalStateException {
+
+    public static void setPlaced(int pos) throws IllegalStateException {
         if(!isClosed)
             throw new IllegalStateException("registerShip needs to be closed!");
         isPlaced[pos] = true;
-	}
-	
-	public static boolean isPlaced(int pos) throws IllegalStateException {
+    }
+
+    public static boolean isPlaced(int pos) throws IllegalStateException {
         if(!isClosed)
             throw new IllegalStateException("registerShip needs to be closed!");
-		return isPlaced[pos];
-	}
+        return isPlaced[pos];
+    }
 
-	private static int getLargestShipIgnoreStatus() {//Be careful with this one. Only use this in State transition
+    private static int getLargestShipIgnoreStatus() {//Be careful with this one. Only use this in State transition
         int largest = 0;
         for(int i:ShipList) {
             if(i>largest)
@@ -106,7 +106,7 @@ public class ShipRegistry {
         return largest;
     }
 
-	public static int getLargestShip() {
+    public static int getLargestShip() {
         if(!isClosed)
             throw new IllegalStateException("registerShip needs to be closed!");
         return getLargestShipIgnoreStatus();

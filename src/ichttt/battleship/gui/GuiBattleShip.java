@@ -34,14 +34,14 @@ public class GuiBattleShip implements ActionListener {
 	private static int desiredLength;
 	private static int currentLength = 1;
 
-    private static final char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toUpperCase().toCharArray();
+    private static final char[] alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
     public static JFrame window;
     private static JDialog chooseShip;
     private static JPanel mainPanel;
-    protected static JButton[][] fields;// = new JButton[Battleship.verticalLength][Battleship.horizontalLength];
+    protected static JButton[][] fields;//Use like this: [posy][posx]
     private static Color color;
-    private static JLabel[] horizontalLabels;// = new JLabel[Battleship.horizontalLength];
-    private static JLabel[] verticalLabels;// = new JLabel[Battleship.verticalLength];
+    private static JLabel[] horizontalLabels;
+    private static JLabel[] verticalLabels;
     private JMenuBar menuBar;
     private JMenu menuitem1;
     private JMenuItem exit, restart, settings;
@@ -107,6 +107,9 @@ public class GuiBattleShip implements ActionListener {
         window.setVisible(true);
     }
 
+    /**
+     * Creates and shows the GUI to place ships
+     */
     public static void initPlacementGui() {
         GuiBattleShip gui = new GuiBattleShip();
         gui.createElements();
@@ -115,9 +118,10 @@ public class GuiBattleShip implements ActionListener {
         gui.chooseShipGui(ShipRegistry.getShipList());
     }
 
+    /**
+     * Creates and shows the battle-GUI
+     */
     public static void initBattleGui() throws NullPointerException {
-        if(Battleship.player1hit==null|| Battleship.player2hit==null)
-            throw new NullPointerException("Player1 or Player2 have not been set.");
         int sum = 0;
         for(int i: ShipRegistry.getShipList())
             sum += i;
@@ -129,7 +133,10 @@ public class GuiBattleShip implements ActionListener {
         gui.mapElements();
         p1=true;
     }
-    
+
+    /**
+     * Clears the text from the fields
+     */
     private static void clearTextFromButtons() {
         for(int i = 0; i< Battleship.verticalLength; i++) {
             for(int i2 = 0; i2< Battleship.horizontalLength; i2++) {
@@ -137,7 +144,11 @@ public class GuiBattleShip implements ActionListener {
             }
         }
     }
-    
+
+    /**
+     * Prints a "X" for every true in the array
+     * @param playList the array
+     */
     public static void loadFromBoolean(boolean[][] playList) {
     	clearTextButtons();
         for(int i = 0; i< Battleship.verticalLength; i++) {
@@ -150,6 +161,10 @@ public class GuiBattleShip implements ActionListener {
         }
     }
 
+    /**
+     * Loads up the previous hits
+     * @param isP1 If the player is player 1
+     */
     private static void battleSetAlreadyTried(boolean isP1) {
         for (int i = 0; i < Battleship.verticalLength; i++) {
             for (int i2 = 0; i2 < Battleship.horizontalLength; i2++) {
@@ -177,11 +192,18 @@ public class GuiBattleShip implements ActionListener {
         }
     }
 
+    /**
+     * Processes the ship chosen by the user
+     * @param i the length of the ship
+     */
 	protected static void processShipChoosed(int i) {
 		chooseShip.dispose();
 		desiredLength = i;
 	}
 
+    /**
+     * Resets all buttons in the field
+     */
     private static void clearTextButtons() {
     	clearTextFromButtons();
         for(int i = 0; i< Battleship.verticalLength; i++) {
@@ -192,6 +214,10 @@ public class GuiBattleShip implements ActionListener {
         }
     }
 
+    /**
+     * Resets the whole GUI
+     * @param reopenRegistry if the ShipRegistry should be reset, too
+     */
     public static void resetEverything(boolean reopenRegistry) {
         if(reopenRegistry)
             ShipRegistry.reopenRegistry(true);
@@ -207,10 +233,17 @@ public class GuiBattleShip implements ActionListener {
         currentLength = 1;
     }
 
+    /**
+     * Resets the whole GUI
+     */
     private static void resetEverything() {
         resetEverything(true);
     }
 
+    /**
+     * Show a GUI to choose the next ship
+     * @param ships All available ships
+     */
     private void chooseShipGui(int ships[]) {
         boolean setSomething = false;
         color = null;
@@ -261,6 +294,7 @@ public class GuiBattleShip implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent event) {
     	String[] buttonString;
+    	int posx, posy;
         switch(event.getActionCommand()) {
             case "exit":
                 System.exit(0);
@@ -275,8 +309,8 @@ public class GuiBattleShip implements ActionListener {
                 break;
             default:
                 buttonString = event.getActionCommand().split(" ");
-                int posx = Integer.parseInt(buttonString[1]);
-                int posy = Integer.parseInt(buttonString[0]);
+                posx = Integer.parseInt(buttonString[1]);
+                posy = Integer.parseInt(buttonString[0]);
                 if(isPlacing) {
                     fields[posy][posx].setText("X");
                     fields[posy][posx].setEnabled(false);
@@ -354,7 +388,6 @@ public class GuiBattleShip implements ActionListener {
                         }
                     }
                 }
-                break;
         }
     }
 }

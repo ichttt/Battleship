@@ -22,7 +22,7 @@ public class Battleship implements Thread.UncaughtExceptionHandler{
     public static HitTable[] shipRowsP1;
     public static HitTable[] shipRowsP2;
     public static void main(String[] args) {
-    	Thread.setDefaultUncaughtExceptionHandler(new Battleship());
+        Thread.setDefaultUncaughtExceptionHandler(new Battleship());
         Settings settings = new Settings();
         //Disable this command and uncomment the other two lines if you can't compile the Settings.form
         settings.createUIComponents();
@@ -46,11 +46,11 @@ public class Battleship implements Thread.UncaughtExceptionHandler{
         return dest;
     }
 
-	@Override
-	public void uncaughtException(Thread t, Throwable e) {
-		e.printStackTrace();
-		JOptionPane.showMessageDialog(null, "Unbehandelte Ausnahme beim Verarbeiten der Aktion. Das Programm funktioniert möglicherweise nicht wie erwartet.\nFehler:"
-									  + e + "\nWeitere Informationen in der Console", "ERROR" , JOptionPane.ERROR_MESSAGE);
-	}
+    @Override
+    public void uncaughtException(Thread t, Throwable e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Unbehandelte Ausnahme beim Verarbeiten der Aktion. Das Programm funktioniert möglicherweise nicht wie erwartet.\nFehler:"
+                                      + e + "\nWeitere Informationen in der Console", "ERROR" , JOptionPane.ERROR_MESSAGE);
+    }
 
 }
