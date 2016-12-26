@@ -35,10 +35,10 @@ public class GuiBattleShip implements ActionListener {
 	private static int currentLength = 1;
 
     private static final char[] alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
-    public static JFrame window;
+    static JFrame window;
     private static JDialog chooseShip;
     private static JPanel mainPanel;
-    protected static JButton[][] fields;//Use like this: [posy][posx]
+    static JButton[][] fields;//Use like this: [posy][posx]
     private static Color color;
     private static JLabel[] horizontalLabels;
     private static JLabel[] verticalLabels;
@@ -315,7 +315,6 @@ public class GuiBattleShip implements ActionListener {
                     fields[posy][posx].setText("X");
                     fields[posy][posx].setEnabled(false);
                     BlockStatusHandler.block(posx, posy);
-
                     //Set color
                     if (color == null) {
                         Random rdm = new Random();
@@ -328,13 +327,15 @@ public class GuiBattleShip implements ActionListener {
                     //New ship
                     if (desiredLength == currentLength) {
                         currentLength = 1;
+                        if(!BlockStatusHandler.shipByShip)
+                            BlockStatusHandler.blockShipByShip();
                         BlockStatusHandler.clearTempBlockList();
                         BlockStatusHandler.changeBlockStatus(false, true);
                         chooseShipGui(ShipRegistry.getShipList());
                     }
                     //Continue ship
                     else {
-                        if (BlockStatusHandler.getSize() == 0) {
+                        if (BlockStatusHandler.getTempSize() == 0) {
                             previousX = posx;
                             BlockStatusHandler.unblockFieldsAround(posx, posy);
                         } else if (previousX == posx) {

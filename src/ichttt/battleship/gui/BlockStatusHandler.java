@@ -32,21 +32,28 @@ public class BlockStatusHandler {
         tempBlockingY.clear();
     }
 
-    public static int getSize() {
+    public static int getTempSize() {
         if(tempBlockingX.size()!= tempBlockingY.size()) {
             throw new IllegalArgumentException("X has to be as large as Y!");
         }
         return tempBlockingY.size();
     }
 
-    private static boolean checkForExpansion(int posX, int posY) {
+    private static boolean checkIfBlocked(int posX, int posY) {
         assert blockingX.size() == blockingY.size();
-        boolean isBlocked = false;
         for(int i = 0;i<blockingX.size();i++) {
             if(blockingX.get(i).equals(posX)&&blockingY.get(i).equals(posY))
-                isBlocked = true;
+                return false;
         }
-        return posX != -1 && posX != Battleship.horizontalLength && posY != Battleship.verticalLength && posY != -1 &&!isBlocked;
+        return true;
+    }
+
+    private static boolean checkForExpansion(int posX, int posY) {
+        return posX != -1 && posX != Battleship.horizontalLength && posY != Battleship.verticalLength && posY != -1;
+    }
+
+    private static boolean checkBoth(int posX, int posY) {
+        return checkForExpansion(posX, posY)&&checkIfBlocked(posX, posY);
     }
 
     protected static void changeBlockStatus(boolean status, int exclude, boolean isX) {
@@ -63,7 +70,7 @@ public class BlockStatusHandler {
     protected static void changeBlockStatus(boolean status, boolean excludeUsed) {
         for(int i = 0; i< Battleship.verticalLength; i++) {
             for(int i2 = 0; i2< Battleship.horizontalLength; i2++) {
-                if(!GuiBattleShip.fields[i][i2].getText().equals("X")||!excludeUsed)
+                if(checkIfBlocked(i2, i)||!excludeUsed)
                     GuiBattleShip.fields[i][i2].setEnabled(!status);
             }
         }
@@ -71,16 +78,41 @@ public class BlockStatusHandler {
 
     protected static void blockFieldsOnDirection(int posX, int posY, boolean checkX) {
         if(checkX) {
-            if(checkForExpansion(posX+1, posY))
+            if(checkBoth(posX+1, posY))
                 GuiBattleShip.fields[posY][posX+1].setEnabled(true);
-            if(checkForExpansion(posX-1, posY))
+            if(checkBoth(posX-1, posY))
                 GuiBattleShip.fields[posY][posX-1].setEnabled(true);
         }
         else {
-            if(checkForExpansion(posX, posY+1))
+            if(checkBoth(posX, posY+1))
                 GuiBattleShip.fields[posY+1][posX].setEnabled(true);
-            if(checkForExpansion(posX, posY-1))
+            if(checkBoth(posX, posY-1))
                 GuiBattleShip.fields[posY-1][posX].setEnabled(true);
+        }
+    }
+
+    protected static void blockShipByShip() {
+        assert !shipByShip;
+        int pos = blockingX.size();
+        for(int i = 0;i<=pos;i++) {
+            if(GuiBattleShip.fields[blockingY.get(i)][blockingX.get(i)].getText().equals("X")) {
+                if (checkBoth(blockingX.get(i), blockingY.get(i) + 1)) {
+                    blockingX.add(blockingX.get(i));
+                    blockingY.add(blockingY.get(i) + 1);
+                }
+                if (checkBoth(blockingX.get(i), blockingY.get(i) - 1)) {
+                    blockingX.add(blockingX.get(i));
+                    blockingY.add(blockingY.get(i) - 1);
+                }
+                if (checkBoth(blockingX.get(i) + 1, blockingY.get(i))) {
+                    blockingX.add(blockingX.get(i) + 1);
+                    blockingY.add(blockingY.get(i));
+                }
+                if (checkBoth(blockingX.get(i) - 1, blockingY.get(i))) {
+                    blockingX.add(blockingX.get(i) - 1);
+                    blockingY.add(blockingY.get(i));
+                }
+            }
         }
     }
 
@@ -92,16 +124,16 @@ public class BlockStatusHandler {
         }
         changeBlockStatus(true, true);
         for(int i = 0; i< tempBlockingY.size(); i++){
-            if(checkForExpansion(tempBlockingX.get(i), tempBlockingY.get(i)+1)) {
+            if(checkBoth(tempBlockingX.get(i), tempBlockingY.get(i)+1)) {
                     GuiBattleShip.fields[tempBlockingY.get(i) + 1][tempBlockingX.get(i)].setEnabled(true);
             }
-            if(checkForExpansion(tempBlockingX.get(i), tempBlockingY.get(i)-1)) {
+            if(checkBoth(tempBlockingX.get(i), tempBlockingY.get(i)-1)) {
                     GuiBattleShip.fields[tempBlockingY.get(i) - 1][tempBlockingX.get(i)].setEnabled(true);
             }
-            if(checkForExpansion(tempBlockingX.get(i)+1, tempBlockingY.get(i))) {
+            if(checkBoth(tempBlockingX.get(i)+1, tempBlockingY.get(i))) {
                     GuiBattleShip.fields[tempBlockingY.get(i)][tempBlockingX.get(i) + 1].setEnabled(true);
             }
-            if(checkForExpansion(tempBlockingX.get(i)-1, tempBlockingY.get(i))) {
+            if(checkBoth(tempBlockingX.get(i)-1, tempBlockingY.get(i))) {
                     GuiBattleShip.fields[tempBlockingY.get(i)][tempBlockingX.get(i) - 1].setEnabled(true);
             }
         }
