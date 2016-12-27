@@ -172,7 +172,12 @@ public class Settings implements ActionListener, KeyListener, ChangeListener, Mo
                 break;
             case "add":
                 try {
-                    list.addElement(Integer.parseInt(text.getText()));
+                    int num = Integer.parseInt(text.getText());
+                    if(num<=0) {
+                        text.setText("");
+                        return;
+                    }
+                    list.addElement(num);
                     int temp[] = new int[list.size()];
                     for(int i = 0;i<list.size();i++)
                         temp[i] = list.get(i);
