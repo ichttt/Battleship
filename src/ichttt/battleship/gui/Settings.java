@@ -166,8 +166,6 @@ public class Settings implements ActionListener, KeyListener, ChangeListener, Mo
                 break;
             case "shipbyship":
                 BlockStatusHandler.shipByShip = !BlockStatusHandler.shipByShip;
-                if(!BlockStatusHandler.shipByShip)
-                    JOptionPane.showMessageDialog(this.window, "This feature is still under development!");
                 break;
             case "add":
                 try {

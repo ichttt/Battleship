@@ -327,9 +327,12 @@ public class GuiBattleShip implements ActionListener {
                     //New ship
                     if (desiredLength == currentLength) {
                         currentLength = 1;
-                        if(!BlockStatusHandler.shipByShip)
-                            BlockStatusHandler.blockShipByShip();
                         BlockStatusHandler.clearTempBlockList();
+                        if(!BlockStatusHandler.shipByShip) {
+                            BlockStatusHandler.blockShipByShip();
+                            //We need to block all fields first
+                            BlockStatusHandler.changeBlockStatus(true, false);
+                        }
                         BlockStatusHandler.changeBlockStatus(false, true);
                         chooseShipGui(ShipRegistry.getShipList());
                     }
