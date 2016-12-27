@@ -246,6 +246,7 @@ public class GuiBattleShip implements ActionListener {
      */
     private void chooseShipGui(int ships[]) {
         boolean setSomething = false;
+        //Null color so the next ship will become a new one
         color = null;
         chooseShip = new JDialog();
         chooseShip.setTitle("Please choose a ship!");

@@ -125,16 +125,16 @@ public class BlockStatusHandler {
         changeBlockStatus(true, true);
         for(int i = 0; i< tempBlockingY.size(); i++){
             if(checkBoth(tempBlockingX.get(i), tempBlockingY.get(i)+1)) {
-                    GuiBattleShip.fields[tempBlockingY.get(i) + 1][tempBlockingX.get(i)].setEnabled(true);
+                GuiBattleShip.fields[tempBlockingY.get(i) + 1][tempBlockingX.get(i)].setEnabled(true);
             }
             if(checkBoth(tempBlockingX.get(i), tempBlockingY.get(i)-1)) {
-                    GuiBattleShip.fields[tempBlockingY.get(i) - 1][tempBlockingX.get(i)].setEnabled(true);
+                GuiBattleShip.fields[tempBlockingY.get(i) - 1][tempBlockingX.get(i)].setEnabled(true);
             }
             if(checkBoth(tempBlockingX.get(i)+1, tempBlockingY.get(i))) {
-                    GuiBattleShip.fields[tempBlockingY.get(i)][tempBlockingX.get(i) + 1].setEnabled(true);
+                GuiBattleShip.fields[tempBlockingY.get(i)][tempBlockingX.get(i) + 1].setEnabled(true);
             }
             if(checkBoth(tempBlockingX.get(i)-1, tempBlockingY.get(i))) {
-                    GuiBattleShip.fields[tempBlockingY.get(i)][tempBlockingX.get(i) - 1].setEnabled(true);
+                GuiBattleShip.fields[tempBlockingY.get(i)][tempBlockingX.get(i) - 1].setEnabled(true);
             }
         }
     }
