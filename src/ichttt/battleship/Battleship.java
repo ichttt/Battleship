@@ -2,6 +2,7 @@ package ichttt.battleship;
 
 import ichttt.battleship.gui.Settings;
 import ichttt.battleship.logic.HitTable;
+import ichttt.battleship.util.i18n;
 
 import javax.swing.*;
 
@@ -22,6 +23,7 @@ public class Battleship implements Thread.UncaughtExceptionHandler{
     public static HitTable[] shipRowsP1;
     public static HitTable[] shipRowsP2;
     public static void main(String[] args) {
+        i18n.initLogging();
         Thread.setDefaultUncaughtExceptionHandler(new Battleship());
         Settings settings = new Settings();
         //Disable this command and uncomment the other two lines if you can't compile the Settings.form
@@ -49,8 +51,8 @@ public class Battleship implements Thread.UncaughtExceptionHandler{
     @Override
     public void uncaughtException(Thread t, Throwable e) {
         e.printStackTrace();
-        JOptionPane.showMessageDialog(null, "Unbehandelte Ausnahme beim Verarbeiten der Aktion. Das Programm funktioniert möglicherweise nicht wie erwartet.\nFehler:"
-                                      + e + "\nWeitere Informationen in der Console", "ERROR" , JOptionPane.ERROR_MESSAGE);
+        System.out.println(t.getName());
+        JOptionPane.showMessageDialog(null, String.format(i18n.translate("UncaughtException"), t.getName(), e), i18n.translate("Error") , JOptionPane.ERROR_MESSAGE);
     }
 
 }

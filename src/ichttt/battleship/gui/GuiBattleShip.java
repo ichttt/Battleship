@@ -3,6 +3,7 @@ package ichttt.battleship.gui;
 import ichttt.battleship.Battleship;
 import ichttt.battleship.logic.ShipRegistry;
 import ichttt.battleship.logic.WinningCondition;
+import ichttt.battleship.util.i18n;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,7 +22,12 @@ class WindowListenerMain extends WindowAdapter {
 
     @Override
     public void windowClosing(WindowEvent e){
-        if (JOptionPane.showConfirmDialog(null, "This will exit the game. Continue?")==0) {
+        JDialog window = null;
+        try {
+            window = (JDialog) e.getSource();
+        }
+        catch (ClassCastException ignored) {}
+        if (JOptionPane.showConfirmDialog(window, i18n.translate("ConfirmExit"))==0) {
             System.exit(0);
         }
     }
@@ -51,7 +57,7 @@ public class GuiBattleShip implements ActionListener {
      */
     private void createElements() {
         window = new JFrame();
-        window.setTitle("Battleship - Player 1");
+        window.setTitle(i18n.translate("Battleship" + i18n.translate("Player") + "1"));
         mainPanel = new JPanel(new GridLayout(Battleship.verticalLength+1,0, 2, 2));
         fields = new JButton[Battleship.verticalLength][Battleship.horizontalLength];
         horizontalLabels  = new JLabel[Battleship.horizontalLength];
@@ -126,7 +132,6 @@ public class GuiBattleShip implements ActionListener {
         for(int i: ShipRegistry.getShipList())
             sum += i;
         WinningCondition.max = sum;
-        System.out.println(sum);
         isPlacing = false;
         GuiBattleShip gui = new GuiBattleShip();
         gui.createElements();
@@ -248,7 +253,7 @@ public class GuiBattleShip implements ActionListener {
         boolean setSomething = false;
         //Null color so the next ship will become a new one
         color = null;
-        chooseShip = new JDialog();
+        chooseShip = new JDialog(window);
         chooseShip.setTitle("Please choose a ship!");
         JPanel shipPanel = new JPanel();
         JButton[] shipButtons = new JButton[ships.length];
@@ -324,7 +329,6 @@ public class GuiBattleShip implements ActionListener {
                     }
                     fields[posy][posx].setBackground(color);
                     ShipRegistry.setShipRow(posx, posy);
-                    System.out.println("X:" + posx + "Y:" + posy );
                     //New ship
                     if (desiredLength == currentLength) {
                         currentLength = 1;

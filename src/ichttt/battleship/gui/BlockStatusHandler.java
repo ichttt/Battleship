@@ -1,9 +1,11 @@
 package ichttt.battleship.gui;
 
 import ichttt.battleship.Battleship;
+import ichttt.battleship.util.i18n;
 
 import java.util.List;
 import java.util.Vector;
+import java.util.logging.Logger;
 
 /**
  * Created by Tobias on 18.11.2016.
@@ -15,6 +17,7 @@ public class BlockStatusHandler {
     private static List<Integer> blockingX = new Vector<Integer>();
     private static List<Integer> blockingY = new Vector<Integer>();
     static boolean shipByShip = true;
+    private static Logger logger = i18n.getLogger(BlockStatusHandler.class.getName());
 
     public static void block(int posx, int posy) {
         blockingX.add(posx);
@@ -34,7 +37,8 @@ public class BlockStatusHandler {
 
     public static int getTempSize() {
         if(tempBlockingX.size()!= tempBlockingY.size()) {
-            throw new IllegalArgumentException("X has to be as large as Y!");
+            logger.severe(i18n.translate("SizeError"));
+            throw new IllegalArgumentException(i18n.translate("SizeError"));
         }
         return tempBlockingY.size();
     }
@@ -120,7 +124,8 @@ public class BlockStatusHandler {
         tempBlockingX.add(posX);
         tempBlockingY.add(posY);
         if(tempBlockingX.size()!= tempBlockingY.size()) {
-            throw new IllegalArgumentException("X has to be as large as Y!");
+            logger.severe(i18n.translate("SizeError"));
+            throw new IllegalArgumentException(i18n.translate("SizeError"));
         }
         changeBlockStatus(true, true);
         for(int i = 0; i< tempBlockingY.size(); i++){

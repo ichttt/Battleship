@@ -40,6 +40,7 @@ public class Settings implements ActionListener, KeyListener, ChangeListener, Mo
     private JCheckBox showShipDown;
     private JTextField SizeXField;
     private JTextField SizeYField;
+    private JButton removeFromList;
     //    private static boolean hasChanged;
     private DefaultListModel<Integer> list = new DefaultListModel<Integer>();
 
@@ -58,6 +59,8 @@ public class Settings implements ActionListener, KeyListener, ChangeListener, Mo
         ShipbyShipCheckBox.setActionCommand("shipbyship");
         addToList.setActionCommand("add");
         addToList.addActionListener(this);
+        removeFromList.setActionCommand("remove");
+        removeFromList.addActionListener(this);
         ShipList.addMouseListener(this);
         text.addKeyListener(this);
     }
@@ -180,6 +183,11 @@ public class Settings implements ActionListener, KeyListener, ChangeListener, Mo
                 }
                 catch (NumberFormatException ignored) {}
                 text.setText("");
+                break;
+            case "remove":
+                int pos = ShipList.getSelectedIndex();
+                if(pos!=-1)
+                    list.remove(pos);
                 break;
             default:
                 throw new IllegalArgumentException("ActionCommand contains invalid String!");
