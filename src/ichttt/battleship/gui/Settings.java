@@ -14,19 +14,9 @@ import java.util.Arrays;
  * Created by Tobias on 08.12.2016.
  */
 
-//class WindowListenerSettings extends WindowAdapter {
-//
-//    @Override
-//    public void windowClosing(WindowEvent e){
-//        Settings settings = new Settings();
-//        settings.onWindowClose((JDialog) e.getSource());
-//    }
-//}
-
 public class Settings implements ActionListener, KeyListener, ChangeListener, MouseListener {
     private JFrame window;
     private JButton okButton;
-//    private JButton cancelButton;
     private JSlider SizeY;
     private JTextField text;
     private JSlider SizeX;
@@ -41,14 +31,11 @@ public class Settings implements ActionListener, KeyListener, ChangeListener, Mo
     private JTextField SizeXField;
     private JTextField SizeYField;
     private JButton removeFromList;
-    //    private static boolean hasChanged;
     private DefaultListModel<Integer> list = new DefaultListModel<Integer>();
 
     private void registerListeners() {
         okButton.setActionCommand("ok");
         okButton.addActionListener(this);
-//        cancelButton.setActionCommand("cancel");
-//        cancelButton.addActionListener(this);
         SizeX.addChangeListener(this);
         SizeY.addChangeListener(this);
         SizeXField.addKeyListener(this);
@@ -103,29 +90,6 @@ public class Settings implements ActionListener, KeyListener, ChangeListener, Mo
         window.setVisible(true);
     }
 
-//    private void saveSettings() {
-//        JOptionPane.showMessageDialog(null, "Not implemented(yet)");
-//    }
-//
-//    protected void onWindowClose(JDialog dialog) {
-//        if(hasChanged) {
-//            switch (JOptionPane.showConfirmDialog(null, "Möchten Sie ihre Einstellungen vor den Schließen speichern?")) {
-//                case 0:
-//                    saveSettings();
-//                case 1:
-//                    dialog.dispose();
-//                    hasChanged = false;
-//                    break;
-//                case 2:
-//                    System.out.println("case 2");
-//                    break;
-//            }
-//        }
-//        else {
-//            dialog.dispose();
-//        }
-//    }
-
     void onWindowClose(JFrame window) {
         //Since the list should be sorted, the last Value should be the largest one. Let's hope :D
         if(list.size()==0) {
@@ -158,12 +122,8 @@ public class Settings implements ActionListener, KeyListener, ChangeListener, Mo
     public void actionPerformed(ActionEvent event) {
         switch (event.getActionCommand()) {
             case "ok":
-//                saveSettings();
                 onWindowClose(window);
                 break;
-//            case "cancel":
-//                onWindowClose(window);
-//                break;
             case "shipdown":
                 WinningCondition.checkShipDown = !WinningCondition.checkShipDown;
                 break;
@@ -241,7 +201,6 @@ public class Settings implements ActionListener, KeyListener, ChangeListener, Mo
             else {
                 throw new IllegalArgumentException("Illegal Argument in keyPressed!");
             }
-//            hasChanged = true;
         }
     }
 
@@ -252,7 +211,6 @@ public class Settings implements ActionListener, KeyListener, ChangeListener, Mo
      */
     @Override
     public void stateChanged(ChangeEvent event) {
-//        hasChanged = true;
         if(event.getSource().equals(SizeX)) {
             SizeXField.setText(SizeX.getValue()+"");
         } else if(event.getSource().equals(SizeY)) {
