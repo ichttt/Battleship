@@ -23,8 +23,6 @@ public class Battleship implements Thread.UncaughtExceptionHandler{
         i18n.initLogging();
         logger.fine("Registering exception handler");
         Thread.setDefaultUncaughtExceptionHandler(new Battleship());
-        if(1==1)
-            throw new IllegalArgumentException("ERROR");
         Settings settings = new Settings();
         //Disable this command and uncomment the other two lines if you can't compile the Settings.form
         settings.createUIComponents();
