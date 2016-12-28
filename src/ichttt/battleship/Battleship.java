@@ -5,26 +5,26 @@ import ichttt.battleship.logic.HitTable;
 import ichttt.battleship.util.i18n;
 
 import javax.swing.*;
+import java.util.logging.Logger;
 
 /**
  * Created by Tobias on 16.11.2016.
  */
 public class Battleship implements Thread.UncaughtExceptionHandler{
-    //MAX:26
-    public static int horizontalLength;
-    //MAX:As much as you want
-    public static int verticalLength;
-
-    public static boolean[][] player1;
-    public static boolean[][] player2;
+    //MAX:25
+    public static int horizontalLength, verticalLength;
+    public static boolean[][] player1, player2;
     //X=Hit;O=No hit;null= not tested
     public static String[][] player1hit = new String[verticalLength][horizontalLength];
     public static String[][] player2hit = new String[verticalLength][horizontalLength];
-    public static HitTable[] shipRowsP1;
-    public static HitTable[] shipRowsP2;
+    public static HitTable[] shipRowsP1, shipRowsP2;
+    private static final Logger logger = i18n.getLogger(Battleship.class.getName());
     public static void main(String[] args) {
         i18n.initLogging();
+        logger.fine("Registering exception handler");
         Thread.setDefaultUncaughtExceptionHandler(new Battleship());
+        if(1==1)
+            throw new IllegalArgumentException("ERROR");
         Settings settings = new Settings();
         //Disable this command and uncomment the other two lines if you can't compile the Settings.form
         settings.createUIComponents();
@@ -50,8 +50,13 @@ public class Battleship implements Thread.UncaughtExceptionHandler{
 
     @Override
     public void uncaughtException(Thread t, Throwable e) {
-        e.printStackTrace();
-        System.out.println(t.getName());
+        logger.severe("***REPORTING EXCEPTION THROWN***\n" + String.format("Caught exception from thread %s, ID %s. Exception: %s", t.getName(), t.getId(), e));
+        StackTraceElement[] st = e.getStackTrace();
+        String s = "";
+        for(StackTraceElement traceElement:st) {
+            s += "at " + traceElement + "\n";
+        }
+        logger.severe("Stacktrace: " + s);
         JOptionPane.showMessageDialog(null, String.format(i18n.translate("UncaughtException"), t.getName(), e), i18n.translate("Error") , JOptionPane.ERROR_MESSAGE);
     }
 

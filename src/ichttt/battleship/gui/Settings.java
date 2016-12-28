@@ -3,12 +3,14 @@ package ichttt.battleship.gui;
 import ichttt.battleship.Battleship;
 import ichttt.battleship.logic.ShipRegistry;
 import ichttt.battleship.logic.WinningCondition;
+import ichttt.battleship.util.i18n;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.event.*;
 import java.util.Arrays;
+import java.util.logging.Logger;
 
 /**
  * Created by Tobias on 08.12.2016.
@@ -21,19 +23,18 @@ public class Settings implements ActionListener, KeyListener, ChangeListener, Mo
     private JTextField text;
     private JSlider SizeX;
     private JButton addToList;
-    private JLabel SizeYLabel;
-    private JLabel SizeXLabel;
     private JCheckBox ShipbyShipCheckBox;
     private JList ShipList;
     private JSplitPane SplitPane;
-    private JScrollPane ShipListPane;
     private JCheckBox showShipDown;
     private JTextField SizeXField;
     private JTextField SizeYField;
     private JButton removeFromList;
     private DefaultListModel<Integer> list = new DefaultListModel<Integer>();
+    private static final Logger logger = i18n.getLogger(Settings.class.getName());
 
     private void registerListeners() {
+        logger.finer("Registering listeners");
         okButton.setActionCommand("ok");
         okButton.addActionListener(this);
         SizeX.addChangeListener(this);
@@ -52,9 +53,12 @@ public class Settings implements ActionListener, KeyListener, ChangeListener, Mo
         text.addKeyListener(this);
     }
 
+    @SuppressWarnings("unchecked")
     public void createUIComponents() {
+        logger.fine("Loading settings");
         boolean shipRegistryClosed = ShipRegistry.getShipRegistryStatus();
         if(shipRegistryClosed) {
+            logger.finer("Adding previous ShipList to list");
             list.clear();
             int[] ships = ShipRegistry.getShipList();
             Arrays.sort(ships);
@@ -63,9 +67,8 @@ public class Settings implements ActionListener, KeyListener, ChangeListener, Mo
             ShipRegistry.reopenRegistry(false);
             GuiBattleShip.resetEverything(false);
             //Get rid of the main window if its valid
-            if (GuiBattleShip.window != null || GuiBattleShip.window.isValid()) {
+            if (GuiBattleShip.window != null || GuiBattleShip.window.isValid())
                 GuiBattleShip.window.dispose();
-            }
             //Load the Values
             SizeX.setValue(Battleship.horizontalLength);
             SizeY.setValue(Battleship.verticalLength);
@@ -74,6 +77,7 @@ public class Settings implements ActionListener, KeyListener, ChangeListener, Mo
         }
         else {
             //default Values
+            logger.finer("Adding default values to list");
             list.addElement(2);
             list.addElement(3);
             list.addElement(4);
@@ -90,14 +94,17 @@ public class Settings implements ActionListener, KeyListener, ChangeListener, Mo
         window.setVisible(true);
     }
 
-    void onWindowClose(JFrame window) {
+    private void onWindowClose(JFrame window) {
+        logger.finer("Parsing values");
         //Since the list should be sorted, the last Value should be the largest one. Let's hope :D
         if(list.size()==0) {
+            logger.warning("Cannot continue, ship list is empty!");
             JOptionPane.showMessageDialog(this.window, "The ship list must not be empty!", "Cannot continue", JOptionPane.ERROR_MESSAGE);
             return;
         }
         //Check if the largest ship can fit the size
         if(SizeX.getValue() < list.get(list.size()-1)&& SizeY.getValue() < list.get(list.size()-1)) {
+            logger.warning("Cannot continue, ship list is too large!");
             JOptionPane.showMessageDialog(this.window, "The registered ships are larger then the size of the field!", "Cannot continue", JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -106,6 +113,7 @@ public class Settings implements ActionListener, KeyListener, ChangeListener, Mo
             blockCount += list.get(i);
         }
         if(blockCount>SizeX.getValue()*SizeY.getValue()) {
+            logger.warning("Cannot continue, ship list does not fit!");
             JOptionPane.showMessageDialog(this.window, "The registered ships do not fit on the field!", "Cannot continue", JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -114,6 +122,7 @@ public class Settings implements ActionListener, KeyListener, ChangeListener, Mo
         for(int i = 0; i<list.size();i++) {
             ShipRegistry.registerShip(list.get(i));
         }
+        logger.info("All values are ok, continuing");
         window.dispose();
         GuiBattleShip.initPlacementGui();
     }

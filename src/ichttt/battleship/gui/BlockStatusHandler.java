@@ -37,8 +37,7 @@ public class BlockStatusHandler {
 
     public static int getTempSize() {
         if(tempBlockingX.size()!= tempBlockingY.size()) {
-            logger.severe(i18n.translate("SizeError"));
-            throw new IllegalArgumentException(i18n.translate("SizeError"));
+            throw new IllegalArgumentException("X has to be as large as Y!");
         }
         return tempBlockingY.size();
     }
@@ -124,8 +123,7 @@ public class BlockStatusHandler {
         tempBlockingX.add(posX);
         tempBlockingY.add(posY);
         if(tempBlockingX.size()!= tempBlockingY.size()) {
-            logger.severe(i18n.translate("SizeError"));
-            throw new IllegalArgumentException(i18n.translate("SizeError"));
+            throw new IllegalArgumentException("X has to be as large as Y!");
         }
         changeBlockStatus(true, true);
         for(int i = 0; i< tempBlockingY.size(); i++){
