@@ -38,7 +38,7 @@ public class i18n {
     }
 
     /**
-     * Verwaltet das Logging-System
+     * Configures and starts the logging and translation system
      */
     public static void initLogging() {
         logger.setLevel(Level.ALL);
@@ -51,7 +51,7 @@ public class i18n {
         userLanguage = System.getProperty("user.language");
 
         currentLocale = new Locale(userLanguage, userCountry);
-        //If this isn't found, we can't continue as no fallback is defined
+        //If this isn't found, we do not have any fallback
         try {
             fallback = ResourceBundle.getBundle("Battleship", new Locale("en", "US"));
         }

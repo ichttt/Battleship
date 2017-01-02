@@ -16,16 +16,6 @@ public class WinningCondition {
     public static boolean checkShipDown = true;
 
     public static void checkWin(int posx, int posy, boolean isP1) {
-        if(checkShipDown) {
-            if(isP1) {
-                if(checkShipDown(getPossibleShip(Battleship.shipRowsP2, posy, posx), Battleship.shipRowsP2, Battleship.player1hit))
-                    JOptionPane.showMessageDialog(GuiBattleShip.window, i18n.translate("ShipDown"));
-            }
-            else {
-                if(checkShipDown(getPossibleShip(Battleship.shipRowsP1, posy, posx), Battleship.shipRowsP1, Battleship.player2hit))
-                    JOptionPane.showMessageDialog(GuiBattleShip.window, "Ship down!");
-            }
-        }
         if (foundp1 == max&&isP1) {
             JOptionPane.showMessageDialog(GuiBattleShip.window, i18n.translate("Player") +  " 1 " +  i18n.translate("win"));
             GuiBattleShip.loadFromBoolean(Battleship.player1);
@@ -33,6 +23,16 @@ public class WinningCondition {
         else if(foundp2==max&&!isP1) {
             JOptionPane.showMessageDialog(GuiBattleShip.window, i18n.translate("Player") +  " 2 " +  i18n.translate("win"));
             GuiBattleShip.loadFromBoolean(Battleship.player2);
+        }
+        else if(checkShipDown) {
+            if(isP1) {
+                if(checkShipDown(getPossibleShip(Battleship.shipRowsP2, posy, posx), Battleship.shipRowsP2, Battleship.player1hit))
+                    JOptionPane.showMessageDialog(GuiBattleShip.window, i18n.translate("ShipDown"));
+            }
+            else {
+                if(checkShipDown(getPossibleShip(Battleship.shipRowsP1, posy, posx), Battleship.shipRowsP1, Battleship.player2hit))
+                    JOptionPane.showMessageDialog(GuiBattleShip.window, i18n.translate("ShipDown"));
+            }
         }
     }
 
