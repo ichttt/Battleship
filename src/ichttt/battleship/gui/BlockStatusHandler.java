@@ -1,6 +1,7 @@
 package ichttt.battleship.gui;
 
 import ichttt.battleship.Battleship;
+import ichttt.battleship.util.LogManager;
 import ichttt.battleship.util.i18n;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public class BlockStatusHandler {
     private static List<Integer> blockingX = new Vector<Integer>();
     private static List<Integer> blockingY = new Vector<Integer>();
     static boolean shipByShip = true;
-    private static Logger logger = i18n.getLogger(BlockStatusHandler.class.getName());
+    private static Logger logger = LogManager.getLogger(BlockStatusHandler.class.getName());
 
     public static void block(int posx, int posy) {
         blockingX.add(posx);

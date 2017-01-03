@@ -15,14 +15,8 @@ import java.util.logging.Logger;
  * Created by Tobias on 27.12.2016.
  */
 public class i18n {
-    private static final Logger logger = Logger.getLogger(i18n.class.getName());
+    private static final Logger logger = LogManager.getLogger(i18n.class.getName());
     private static ResourceBundle messages, fallback;
-
-    public static Logger getLogger(@NotNull String name) {
-        Logger log = Logger.getLogger(name);
-        log.setLevel(Level.ALL);
-        return log;
-    }
 
     public static String translate(@NotNull String string) {
         try {
@@ -40,13 +34,10 @@ public class i18n {
     /**
      * Configures and starts the logging and translation system
      */
-    public static void initLogging() {
-        logger.setLevel(Level.ALL);
+    public static void initTranslationSystem() {
         Locale currentLocale;
-        String userLanguage, userCountry, userdir;
-        Handler fileHandler;
+        String userLanguage, userCountry;
 
-        userdir = System.getProperty("user.home");
         userCountry = System.getProperty("user.country");
         userLanguage = System.getProperty("user.language");
 
@@ -54,35 +45,14 @@ public class i18n {
         //If this isn't found, we do not have any fallback
         try {
             fallback = ResourceBundle.getBundle("Battleship", new Locale("en", "US"));
-        }
-        catch (MissingResourceException e) {
+        } catch (MissingResourceException e) {
             logger.severe("Could not load en_US. This File should be always available!");
         }
-
+        logger.fine(String.format("Loading %s_%s", userLanguage, userCountry));
         try {
             messages = ResourceBundle.getBundle("Battleship", currentLocale);
-        }
-        catch(MissingResourceException e) {
+        } catch (MissingResourceException e) {
             logger.warning("Could not load " + currentLocale);
         }
-
-        try {
-            if(System.getProperty("os.name").startsWith("Windows")) {
-                new File(userdir + "/AppData/Local/Battleship").mkdirs();
-                fileHandler = new FileHandler(userdir + "/AppData/Local/Battleship/LogBattleship.xml");
-            }
-            else {
-                new File(userdir + "Battleship").mkdirs();
-                fileHandler = new FileHandler(userdir+ "/Battleship/LogBattleship.xml");
-            }
-            //Add a global FileHandler
-            logger.getParent().addHandler(fileHandler);
-        }
-        catch (IOException e) {
-            logger.severe(translate("LogError"));
-            e.printStackTrace();
-        }
-        logger.info(translate("LogStart"));
     }
-
 }

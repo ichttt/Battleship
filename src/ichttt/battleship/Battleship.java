@@ -2,6 +2,7 @@ package ichttt.battleship;
 
 import ichttt.battleship.gui.Settings;
 import ichttt.battleship.logic.HitTable;
+import ichttt.battleship.util.LogManager;
 import ichttt.battleship.util.i18n;
 
 import javax.swing.*;
@@ -18,9 +19,10 @@ public class Battleship implements Thread.UncaughtExceptionHandler{
     public static String[][] player1hit = new String[verticalLength][horizontalLength];
     public static String[][] player2hit = new String[verticalLength][horizontalLength];
     public static HitTable[] shipRowsP1, shipRowsP2;
-    private static final Logger logger = i18n.getLogger(Battleship.class.getName());
+    private static final Logger logger = LogManager.getLogger(Battleship.class.getName());
     public static void main(String[] args) {
-        i18n.initLogging();
+        LogManager.initFileLogging();
+        i18n.initTranslationSystem();
         logger.fine("Registering exception handler");
         Thread.setDefaultUncaughtExceptionHandler(new Battleship());
         Settings settings = new Settings();

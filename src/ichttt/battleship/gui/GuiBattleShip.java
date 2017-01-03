@@ -39,7 +39,7 @@ public class GuiBattleShip implements ActionListener {
     public static boolean autoNextShip = false;
     private static int previousX;
     static int desiredLength;
-	private static int currentLength = 1;
+	private static int currentLength;
 
     private static final char[] alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
     public static JFrame window;
@@ -120,6 +120,8 @@ public class GuiBattleShip implements ActionListener {
         GuiBattleShip gui = new GuiBattleShip();
         gui.createElements();
         gui.mapElements();
+        //Make sure all fields are default
+        resetEverything(false);
         ShipRegistry.closeRegistry();
         gui.nextShip(ShipRegistry.getShipList());
     }

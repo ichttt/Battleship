@@ -3,6 +3,7 @@ package ichttt.battleship.gui;
 import ichttt.battleship.Battleship;
 import ichttt.battleship.logic.ShipRegistry;
 import ichttt.battleship.logic.WinningCondition;
+import ichttt.battleship.util.LogManager;
 import ichttt.battleship.util.i18n;
 
 import javax.swing.*;
@@ -32,7 +33,7 @@ public class Settings implements ActionListener, KeyListener, ChangeListener, Mo
     private JButton removeFromList;
     private JCheckBox autoNextShip;
     private DefaultListModel<Integer> list = new DefaultListModel<Integer>();
-    private static final Logger logger = i18n.getLogger(Settings.class.getName());
+    private static final Logger logger = LogManager.getLogger(Settings.class.getName());
 
     private void registerListeners() {
         logger.finer("Registering listeners");
