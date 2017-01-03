@@ -144,6 +144,7 @@ public class Settings implements ActionListener, KeyListener, ChangeListener, Mo
                 break;
             case "autoship":
                 GuiBattleShip.autoNextShip = !GuiBattleShip.autoNextShip;
+                break;
             case "add":
                 try {
                     int num = Integer.parseInt(text.getText());
