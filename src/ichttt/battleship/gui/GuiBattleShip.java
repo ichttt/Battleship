@@ -36,18 +36,18 @@ class WindowListenerMain extends WindowAdapter {
 public class GuiBattleShip implements ActionListener {
     private static boolean isPlacing = true;
     private static boolean p1 = true;
+    public static boolean autoNextShip = false;
     private static int previousX;
-	private static int desiredLength;
+    static int desiredLength;
 	private static int currentLength = 1;
 
     private static final char[] alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
     public static JFrame window;
-    private static JDialog chooseShip;
+    static JDialog chooseShip;
     private static JPanel mainPanel;
     static JButton[][] fields;//Use like this: [posy][posx]
     private static Color color;
-    private static JLabel[] horizontalLabels;
-    private static JLabel[] verticalLabels;
+    private static JLabel[] horizontalLabels, verticalLabels;
     private JMenuBar menuBar;
     private JMenu menuitem1;
     private JMenuItem exit, restart, settings;
@@ -57,7 +57,7 @@ public class GuiBattleShip implements ActionListener {
      */
     private void createElements() {
         window = new JFrame();
-        window.setTitle(i18n.translate("Battleship") + " " + i18n.translate("Player") + " 2");
+        window.setTitle(i18n.translate("Battleship") + " " + i18n.translate("Player") + " 1");
         mainPanel = new JPanel(new GridLayout(Battleship.verticalLength+1,0, 2, 2));
         fields = new JButton[Battleship.verticalLength][Battleship.horizontalLength];
         horizontalLabels  = new JLabel[Battleship.horizontalLength];
@@ -121,7 +121,7 @@ public class GuiBattleShip implements ActionListener {
         gui.createElements();
         gui.mapElements();
         ShipRegistry.closeRegistry();
-        gui.chooseShipGui(ShipRegistry.getShipList());
+        gui.nextShip(ShipRegistry.getShipList());
     }
 
     /**
@@ -198,15 +198,6 @@ public class GuiBattleShip implements ActionListener {
     }
 
     /**
-     * Processes the ship chosen by the user
-     * @param i the length of the ship
-     */
-	protected static void processShipChoosed(int i) {
-		chooseShip.dispose();
-		desiredLength = i;
-	}
-
-    /**
      * Resets all buttons in the field
      */
     private static void clearTextButtons() {
@@ -245,14 +236,50 @@ public class GuiBattleShip implements ActionListener {
         resetEverything(true);
     }
 
+
+    private void nextShip(int ships[]) {
+        //Null color so the next ship will become a new one
+        color = null;
+        if(!autoNextShip) {
+            chooseShipGui(ships);
+        }
+        else {
+            try {
+                ActionListenerShipChooser.processShipChoose(ShipRegistry.getPos() + 1, ShipRegistry.getShipList());
+            } catch(IndexOutOfBoundsException e) {
+                if(p1)
+                    finishP1();
+                else
+                    finishP2();
+            }
+        }
+    }
+
+    private void finishP1() {
+        Battleship.player1 = Battleship.buttonToBooleanAdapter(fields);
+        Battleship.shipRowsP1 = ShipRegistry.exportShipRowsAndWipe();
+        window.setTitle(i18n.translate("Battleship") + " " + i18n.translate("Player") + " 2");
+        JOptionPane.showMessageDialog(null, i18n.translate("Player") +" 2" + i18n.translate("YourTurn"));
+        resetEverything();
+        p1 = false;
+        nextShip(ShipRegistry.getShipList());
+    }
+
+    private void finishP2() {
+        Battleship.player2 = Battleship.buttonToBooleanAdapter(fields);
+        Battleship.shipRowsP2 = ShipRegistry.exportShipRowsAndWipe();
+        JOptionPane.showMessageDialog(window, i18n.translate("Attack"));
+        resetEverything();
+        window.dispose();
+        initBattleGui();
+    }
+
     /**
      * Show a GUI to choose the next ship
      * @param ships All available ships
      */
     private void chooseShipGui(int ships[]) {
         boolean setSomething = false;
-        //Null color so the next ship will become a new one
-        color = null;
         chooseShip = new JDialog(window);
         chooseShip.setTitle(i18n.translate("ChooseShip"));
         JPanel shipPanel = new JPanel();
@@ -270,31 +297,21 @@ public class GuiBattleShip implements ActionListener {
         if(!setSomething) {
             //Store to Player
             if(p1) {
-                Battleship.player1 = Battleship.buttonToBooleanAdapter(fields);
-                Battleship.shipRowsP1 = ShipRegistry.exportShipRowsAndWipe();
-                window.setTitle(i18n.translate("Battleship") + " " + i18n.translate("Player") + " 2");
-                JOptionPane.showMessageDialog(null, i18n.translate("Player") +" 2" + i18n.translate("YourTurn"));
-                resetEverything();
-                p1 = false;
-                chooseShipGui(ShipRegistry.getShipList());
+                finishP1();
             }
             else {
-                Battleship.player2 = Battleship.buttonToBooleanAdapter(fields);
-                Battleship.shipRowsP2 = ShipRegistry.exportShipRowsAndWipe();
-                JOptionPane.showMessageDialog(window, i18n.translate("Attack"));
-                resetEverything();
-                window.dispose();
-                initBattleGui();
+                finishP2();
             }
-            return;
         }
-        chooseShip.add(shipPanel);
-        chooseShip.setModal(true);
-        chooseShip.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-        chooseShip.addWindowListener(new WindowListenerMain());
-        chooseShip.pack();
-        chooseShip.setResizable(false);
-        chooseShip.setVisible(true);
+        else {
+            chooseShip.add(shipPanel);
+            chooseShip.setModal(true);
+            chooseShip.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+            chooseShip.addWindowListener(new WindowListenerMain());
+            chooseShip.pack();
+            chooseShip.setResizable(false);
+            chooseShip.setVisible(true);
+        }
     }
 
     @Override
@@ -307,7 +324,7 @@ public class GuiBattleShip implements ActionListener {
                 break;
             case "restart":
                 resetEverything();
-                chooseShipGui(ShipRegistry.getShipList());
+                nextShip(ShipRegistry.getShipList());
                 break;
             case "settings":
                 Settings settings = new Settings();
@@ -339,7 +356,7 @@ public class GuiBattleShip implements ActionListener {
                             BlockStatusHandler.changeBlockStatus(true, false);
                         }
                         BlockStatusHandler.changeBlockStatus(false, true);
-                        chooseShipGui(ShipRegistry.getShipList());
+                        nextShip(ShipRegistry.getShipList());
                     }
                     //Continue ship
                     else {
@@ -372,7 +389,7 @@ public class GuiBattleShip implements ActionListener {
                             p1=!p1;
                             fields[posy][posx].setBackground(new Color(175,0,0));
                             JOptionPane.showMessageDialog(window, i18n.translate("NoHit") + " " + i18n.translate("Player") + " 2" + i18n.translate("YourTurn"));
-                            window.setTitle(i18n.translate("Battleship") + " " + i18n.translate("Player") + " 2");
+                            window.setTitle(i18n.translate("Battleship") + " " + i18n.translate("Player") + " 1");
                             clearTextButtons();
                             battleSetAlreadyTried(p1);
                         }

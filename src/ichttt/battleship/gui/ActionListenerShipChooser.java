@@ -7,12 +7,15 @@ import java.awt.event.ActionListener;
 
 public class ActionListenerShipChooser implements ActionListener {
 
+    public static void processShipChoose(int shipPos, int[] shipList) {
+        ShipRegistry.setPlaced(shipPos);
+        ShipRegistry.stepPos(false);
+        GuiBattleShip.desiredLength = shipList[shipPos];
+    }
+
     @Override
     public void actionPerformed(ActionEvent arg0) {
-	    int cmd = Integer.parseInt(arg0.getActionCommand());
-        int[] shipList = ShipRegistry.getShipList();
-        ShipRegistry.setPlaced(cmd);
-        ShipRegistry.stepPos(false);
-        GuiBattleShip.processShipChoosed(shipList[cmd]);
+        processShipChoose(Integer.parseInt(arg0.getActionCommand()), ShipRegistry.getShipList());
+        GuiBattleShip.chooseShip.dispose();
 	}
 }

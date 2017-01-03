@@ -30,6 +30,7 @@ public class Settings implements ActionListener, KeyListener, ChangeListener, Mo
     private JTextField SizeXField;
     private JTextField SizeYField;
     private JButton removeFromList;
+    private JCheckBox autoNextShip;
     private DefaultListModel<Integer> list = new DefaultListModel<Integer>();
     private static final Logger logger = i18n.getLogger(Settings.class.getName());
 
@@ -45,6 +46,8 @@ public class Settings implements ActionListener, KeyListener, ChangeListener, Mo
         showShipDown.setActionCommand("shipdown");
         ShipbyShipCheckBox.addActionListener(this);
         ShipbyShipCheckBox.setActionCommand("shipbyship");
+        autoNextShip.setActionCommand("autoship");
+        autoNextShip.addActionListener(this);
         addToList.setActionCommand("add");
         addToList.addActionListener(this);
         removeFromList.setActionCommand("remove");
@@ -139,6 +142,8 @@ public class Settings implements ActionListener, KeyListener, ChangeListener, Mo
             case "shipbyship":
                 BlockStatusHandler.shipByShip = !BlockStatusHandler.shipByShip;
                 break;
+            case "autoship":
+                GuiBattleShip.autoNextShip = !GuiBattleShip.autoNextShip;
             case "add":
                 try {
                     int num = Integer.parseInt(text.getText());
