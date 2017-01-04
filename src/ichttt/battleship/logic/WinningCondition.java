@@ -2,6 +2,7 @@ package ichttt.battleship.logic;
 
 import ichttt.battleship.Battleship;
 import ichttt.battleship.gui.GuiBattleShip;
+import ichttt.battleship.gui.StatusBarManager;
 import ichttt.battleship.util.i18n;
 
 import javax.swing.*;
@@ -26,12 +27,20 @@ public class WinningCondition {
         }
         else if(checkShipDown) {
             if(isP1) {
-                if(checkShipDown(getPossibleShip(Battleship.shipRowsP2, posy, posx), Battleship.shipRowsP2, Battleship.player1hit))
+                int possible = getPossibleShip(Battleship.shipRowsP2, posy, posx);
+                if(checkShipDown(possible, Battleship.shipRowsP2, Battleship.player1hit)) {
                     JOptionPane.showMessageDialog(GuiBattleShip.window, i18n.translate("ShipDown"));
+                    StatusBarManager.defeatedShipsP1.add(Battleship.shipRowsP2[possible]);
+                    StatusBarManager.updateBattleStatusBar(true);
+                }
             }
             else {
-                if(checkShipDown(getPossibleShip(Battleship.shipRowsP1, posy, posx), Battleship.shipRowsP1, Battleship.player2hit))
+                int possible = getPossibleShip(Battleship.shipRowsP1, posy, posx);
+                if(checkShipDown(possible, Battleship.shipRowsP1, Battleship.player2hit)) {
                     JOptionPane.showMessageDialog(GuiBattleShip.window, i18n.translate("ShipDown"));
+                    StatusBarManager.defeatedShipsP2.add(Battleship.shipRowsP1[possible]);
+                    StatusBarManager.updateBattleStatusBar(false);
+                }
             }
         }
     }

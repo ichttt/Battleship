@@ -2,7 +2,6 @@ package ichttt.battleship.gui;
 
 import ichttt.battleship.Battleship;
 import ichttt.battleship.logic.ShipRegistry;
-import ichttt.battleship.logic.StatusBar.StatusBarContent;
 import ichttt.battleship.logic.WinningCondition;
 import ichttt.battleship.logic.StatusBar.StatusBar;
 import ichttt.battleship.util.i18n;
@@ -50,8 +49,7 @@ public class GuiBattleShip implements ActionListener {
     static JButton[][] fields;//Use like this: [posy][posx]
     private static Color color;
     private static JLabel[] horizontalLabels, verticalLabels;
-    private static JLabel bar;
-    private static StatusBar statusBar;
+    static JLabel bar;
     private JMenuBar menuBar;
     private JMenu menuitem1;
     private JMenuItem exit, restart, settings;
@@ -139,14 +137,14 @@ public class GuiBattleShip implements ActionListener {
         //Make sure all fields are default
         resetEverything(false);
         ShipRegistry.closeRegistry();
-        updateShipStatusBar();
+        StatusBarManager.updatePlacingBar();
         gui.nextShip(ShipRegistry.getShipList());
     }
 
     /**
      * Creates and shows the battle-GUI
      */
-    public static void initBattleGui() throws NullPointerException {
+    public static void initBattleGui() {
         int sum = 0;
         for(int i: ShipRegistry.getShipList())
             sum += i;
@@ -155,6 +153,7 @@ public class GuiBattleShip implements ActionListener {
         GuiBattleShip gui = new GuiBattleShip();
         gui.createElements();
         gui.mapElements();
+        StatusBarManager.updateBattleStatusBar(true);
         p1=true;
     }
 
@@ -229,32 +228,14 @@ public class GuiBattleShip implements ActionListener {
         }
     }
 
-    public static void updateShipStatusBar() {
-        String ships = "";
-        int shipList[] = ShipRegistry.getShipList();
-        for(int i = 0; i<ShipRegistry.getShipListSize(); i++) {
-            if(!ShipRegistry.isPlaced(i))
-                ships += shipList[i] + ", ";
-        }
-        if(ships.length()!=0)
-            ships = ships.substring(0, ships.length()-2);
-        else
-            ships = "Keine weiteren Schiffe vorhanden";
-        statusBar.addContent(new StatusBarContent("ships", "Verfügbare Schiffe: " + ships, 10));
-        statusBar.addContent(new StatusBarContent("currentShip", "Ausgewähltes Schiff: " + desiredLength, 11));
-        bar.setText(statusBar.buildString());
-    }
-
     /**
      * Resets the whole GUI
      * @param reopenRegistry if the ShipRegistry should be reset, too
      */
     public static void resetEverything(boolean reopenRegistry) {
-        statusBar = new StatusBar();
-        if(reopenRegistry) {
+        StatusBarManager.statusBar = new StatusBar();
+        if(reopenRegistry)
             ShipRegistry.reopenRegistry(true);
-            updateShipStatusBar();
-        }
         isPlacing = true;
         p1 = true;
         BlockStatusHandler.clearEntireBlockList();
@@ -451,6 +432,8 @@ public class GuiBattleShip implements ActionListener {
                             battleSetAlreadyTried(p1);
                         }
                     }
+                    if(WinningCondition.checkShipDown)
+                        StatusBarManager.updateBattleStatusBar(p1);
                 }
         }
     }

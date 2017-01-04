@@ -94,6 +94,19 @@ public class HitTable {
     }
 
     /**
+     * Returns the size of the ship
+     * @return The size
+     */
+    public int actualSize() {
+        int count = 0;
+        for(int i:posx) {
+            if(i!=-1)
+                count++;
+        }
+        return count;
+    }
+
+    /**
      * Sets all positions of an array to a given value
      * @param posx The x value
      * @param posy The y value
