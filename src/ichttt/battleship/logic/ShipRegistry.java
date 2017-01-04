@@ -85,6 +85,10 @@ public class ShipRegistry {
         return output;
     }
 
+    public static int getShipListSize() {
+        return ShipList.size();
+    }
+
     public static void setPlaced(int pos) throws IllegalStateException {
         if(!isClosed)
             throw new IllegalStateException("registerShip needs to be closed!");

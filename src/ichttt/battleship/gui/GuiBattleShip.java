@@ -2,7 +2,9 @@ package ichttt.battleship.gui;
 
 import ichttt.battleship.Battleship;
 import ichttt.battleship.logic.ShipRegistry;
+import ichttt.battleship.logic.StatusBar.StatusBarContent;
 import ichttt.battleship.logic.WinningCondition;
+import ichttt.battleship.logic.StatusBar.StatusBar;
 import ichttt.battleship.util.i18n;
 
 import javax.swing.*;
@@ -44,10 +46,12 @@ public class GuiBattleShip implements ActionListener {
     private static final char[] alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
     public static JFrame window;
     static JDialog chooseShip;
-    private static JPanel mainPanel;
+    private static JPanel buttonPanel, mainPanel;
     static JButton[][] fields;//Use like this: [posy][posx]
     private static Color color;
     private static JLabel[] horizontalLabels, verticalLabels;
+    private static JLabel bar;
+    private static StatusBar statusBar;
     private JMenuBar menuBar;
     private JMenu menuitem1;
     private JMenuItem exit, restart, settings;
@@ -58,7 +62,9 @@ public class GuiBattleShip implements ActionListener {
     private void createElements() {
         window = new JFrame();
         window.setTitle(i18n.translate("Battleship") + " " + i18n.translate("Player") + " 1");
-        mainPanel = new JPanel(new GridLayout(Battleship.verticalLength+1,0, 2, 2));
+        buttonPanel = new JPanel(new GridLayout(Battleship.verticalLength+1,0, 1, 1));
+        mainPanel = new JPanel(new GridBagLayout());
+        bar = new JLabel();
         fields = new JButton[Battleship.verticalLength][Battleship.horizontalLength];
         horizontalLabels  = new JLabel[Battleship.horizontalLength];
         verticalLabels = new JLabel[Battleship.verticalLength];
@@ -96,20 +102,30 @@ public class GuiBattleShip implements ActionListener {
         menuitem1.addSeparator();
         menuitem1.add(exit);
         menuBar.add(menuitem1);
-        mainPanel.add(new JLabel(""));
+        buttonPanel.add(new JLabel(""));
         for(int i = 0; i< Battleship.horizontalLength; i++)
-            mainPanel.add(horizontalLabels[i]);
+            buttonPanel.add(horizontalLabels[i]);
 
         for(int i = 0; i< Battleship.verticalLength; i++) {
-            mainPanel.add(verticalLabels[i]);
+            buttonPanel.add(verticalLabels[i]);
             for(int i2 = 0; i2< Battleship.horizontalLength; i2++) {
-                mainPanel.add(fields[i][i2]);
+                buttonPanel.add(fields[i][i2]);
             }
         }
+        GridBagConstraints layout = new GridBagConstraints();
+        layout.fill = GridBagConstraints.BOTH;
+        layout.gridx= 0;
+        layout.gridy = 0;
+        layout.weightx = 1;
+        layout.weighty = 26/Battleship.verticalLength;
+        mainPanel.add(buttonPanel, layout);
+        layout.gridy = 1;
+        layout.weighty = 1-layout.weighty;
+        mainPanel.add(bar, layout);
         window.add(mainPanel);
         window.setJMenuBar(menuBar);
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        window.setSize(600, 600);
+        window.setSize(600, 500);
         window.setVisible(true);
     }
 
@@ -123,6 +139,7 @@ public class GuiBattleShip implements ActionListener {
         //Make sure all fields are default
         resetEverything(false);
         ShipRegistry.closeRegistry();
+        updateShipStatusBar();
         gui.nextShip(ShipRegistry.getShipList());
     }
 
@@ -212,13 +229,32 @@ public class GuiBattleShip implements ActionListener {
         }
     }
 
+    public static void updateShipStatusBar() {
+        String ships = "";
+        int shipList[] = ShipRegistry.getShipList();
+        for(int i = 0; i<ShipRegistry.getShipListSize(); i++) {
+            if(!ShipRegistry.isPlaced(i))
+                ships += shipList[i] + ", ";
+        }
+        if(ships.length()!=0)
+            ships = ships.substring(0, ships.length()-2);
+        else
+            ships = "Keine weiteren Schiffe vorhanden";
+        statusBar.addContent(new StatusBarContent("ships", "Verfügbare Schiffe: " + ships, 10));
+        statusBar.addContent(new StatusBarContent("currentShip", "Ausgewähltes Schiff: " + desiredLength, 11));
+        bar.setText(statusBar.buildString());
+    }
+
     /**
      * Resets the whole GUI
      * @param reopenRegistry if the ShipRegistry should be reset, too
      */
     public static void resetEverything(boolean reopenRegistry) {
-        if(reopenRegistry)
+        statusBar = new StatusBar();
+        if(reopenRegistry) {
             ShipRegistry.reopenRegistry(true);
+            updateShipStatusBar();
+        }
         isPlacing = true;
         p1 = true;
         BlockStatusHandler.clearEntireBlockList();
