@@ -258,6 +258,15 @@ public class GuiBattleShip implements ActionListener {
         resetEverything(true);
     }
 
+    public static void processShipChoose(int shipPos, boolean close) {
+        if(close)
+            GuiBattleShip.chooseShip.dispose();
+        ShipRegistry.setPlaced(shipPos);
+        ShipRegistry.stepPos(false);
+        GuiBattleShip.desiredLength = ShipRegistry.getShipList()[shipPos];
+        StatusBarManager.updatePlacingBar(GuiBattleShip.getP1());
+    }
+
 
     private void nextShip(int ships[]) {
         //Null color so the next ship will become a new one
@@ -267,7 +276,7 @@ public class GuiBattleShip implements ActionListener {
         }
         else {
             try {
-                ActionListenerShipChooser.processShipChoose(ShipRegistry.getPos() + 1, ShipRegistry.getShipList());
+                processShipChoose(ShipRegistry.getPos() + 1, false);
             } catch(IndexOutOfBoundsException e) {
                 if(p1)
                     finishP1();
@@ -311,7 +320,7 @@ public class GuiBattleShip implements ActionListener {
         	if(!ShipRegistry.isPlaced(i)) {
 	            shipButtons[i] = new JButton(ships[i]+"");
 	            shipButtons[i].setActionCommand(i+"");
-	            shipButtons[i].addActionListener(new ActionListenerShipChooser());
+	            shipButtons[i].addActionListener((ActionEvent e) -> processShipChoose(Integer.parseInt(e.getActionCommand()), true));
 	            shipPanel.add(shipButtons[i]);
                 setSomething = true;
         	}
