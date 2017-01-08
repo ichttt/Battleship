@@ -10,6 +10,7 @@ import com.sun.istack.internal.Nullable;
 public class HitTable {
     public int[] posx, posy;
     private int i = 0;
+    private int cacheActualSize = -1;
 
     /**
      * Creates a new HitTable. Only one value may be null.
@@ -89,21 +90,22 @@ public class HitTable {
      * @return The size
      */
     public int size() {
-        assert posx.length==posy.length;
         return posx.length;
     }
 
     /**
      * Returns the size of the ship
+     * This method is not threadsafe
      * @return The size
      */
     public int actualSize() {
-        int count = 0;
-        for(int i:posx) {
-            if(i!=-1)
-                count++;
+        if(cacheActualSize==-1) {
+            cacheActualSize = 0;
+            for (int i : posx) {
+                if (i != -1) cacheActualSize++;
+            }
         }
-        return count;
+        return cacheActualSize;
     }
 
     /**

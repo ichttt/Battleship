@@ -12,13 +12,19 @@ import java.util.List;
  * Created by Tobias on 04.01.2017.
  */
 public class StatusBarManager {
-    static StatusBar statusBar;
+    private static StatusBar statusBarP1 = new StatusBar();
+    private static StatusBar statusBarP2 = new StatusBar();
     public static List<HitTable> defeatedShipsP1 = new ArrayList<HitTable>();
     public static List<HitTable> defeatedShipsP2 = new ArrayList<HitTable>();
 
-    private static String quietlyRemove(String toRemove, int size, String alternativeMessage) {
-        if(toRemove.length()>size)
-            return toRemove.substring(0, toRemove.length()-size);
+    static void flushStatusBars() {
+        statusBarP1 = new StatusBar();
+        statusBarP2 = new StatusBar();
+    }
+
+    private static String quietlyRemove(String toRemove, String alternativeMessage) {
+        if(toRemove.length()>2)
+            return toRemove.substring(0, toRemove.length()-2);
         else
             return alternativeMessage;
     }
@@ -31,21 +37,25 @@ public class StatusBarManager {
         return false;
     }
 
-    private static void updateShipList() {
+    public static void updatePlacingBar(boolean isP1) {
         String ships = "";
         int shipList[] = ShipRegistry.getShipList();
         for(int i = 0; i<ShipRegistry.getShipListSize(); i++) {
             if(!ShipRegistry.isPlaced(i))
                 ships += shipList[i] + ", ";
         }
-        ships = quietlyRemove(ships, 2, "Keine weiteren Schiffe vorhanden!");
-        statusBar.addContent(new StatusBarContent("ships", "Verfügbare Schiffe: " + ships, 10));
-    }
+        ships = quietlyRemove(ships, "Keine weiteren Schiffe vorhanden!");
 
-    static void updatePlacingBar() {
-        updateShipList();
-        statusBar.addContent(new StatusBarContent("currentShip", "Ausgewähltes Schiff: " + GuiBattleShip.desiredLength, 11));
-        GuiBattleShip.bar.setText(statusBar.buildString());
+        if(isP1) {
+            statusBarP1.addOrChangeContent(new StatusBarContent("ships", "Verfügbare Schiffe: " + ships, 10));
+            statusBarP1.addOrChangeContent(new StatusBarContent("currentShip", "Ausgewähltes Schiff: " + GuiBattleShip.desiredLength, 11));
+            GuiBattleShip.bar.setText(statusBarP1.buildString());
+        }
+        else {
+            statusBarP2.addOrChangeContent(new StatusBarContent("ships", "Verfügbare Schiffe: " + ships, 10));
+            statusBarP2.addOrChangeContent(new StatusBarContent("currentShip", "Ausgewähltes Schiff: " + GuiBattleShip.desiredLength, 11));
+            GuiBattleShip.bar.setText(statusBarP2.buildString());
+        }
     }
 
     public static void updateBattleStatusBar(boolean isP1) {
@@ -70,10 +80,17 @@ public class StatusBarManager {
                     nonShips +=ship+", ";
             }
         }
-        ships = quietlyRemove(ships, 2, "Noch kein Schiff versenkt!");
-        nonShips = quietlyRemove(nonShips, 2, "Alle Schiffe versenkt!");
-        statusBar.addContent(new StatusBarContent("shipsDown", "Versenkte Schiffe: " + ships, 10));
-        statusBar.addContent(new StatusBarContent("shipsAvailable", "Noch nicht versenkte Schiffe: " + nonShips, 11));
-        GuiBattleShip.bar.setText(statusBar.buildString());
+        ships = quietlyRemove(ships, "Noch kein Schiff versenkt!");
+        nonShips = quietlyRemove(nonShips, "Alle Schiffe versenkt!");
+        if(isP1) {
+            statusBarP1.addOrChangeContent(new StatusBarContent("shipsDown", "Versenkte Schiffe: " + ships, 10));
+            statusBarP1.addOrChangeContent(new StatusBarContent("shipsAvailable", "Noch nicht versenkte Schiffe: " + nonShips, 11));
+            GuiBattleShip.bar.setText(statusBarP1.buildString());
+        }
+        else {
+            statusBarP2.addOrChangeContent(new StatusBarContent("shipsDown", "Versenkte Schiffe: " + ships, 10));
+            statusBarP2.addOrChangeContent(new StatusBarContent("shipsAvailable", "Noch nicht versenkte Schiffe: " + nonShips, 11));
+            GuiBattleShip.bar.setText(statusBarP2.buildString());
+        }
     }
 }

@@ -11,7 +11,7 @@ public class ActionListenerShipChooser implements ActionListener {
         ShipRegistry.setPlaced(shipPos);
         ShipRegistry.stepPos(false);
         GuiBattleShip.desiredLength = shipList[shipPos];
-        StatusBarManager.updatePlacingBar();
+        StatusBarManager.updatePlacingBar(GuiBattleShip.getP1());
     }
 
     @Override

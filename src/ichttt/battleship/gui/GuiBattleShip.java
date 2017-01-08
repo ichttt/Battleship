@@ -3,7 +3,6 @@ package ichttt.battleship.gui;
 import ichttt.battleship.Battleship;
 import ichttt.battleship.logic.ShipRegistry;
 import ichttt.battleship.logic.WinningCondition;
-import ichttt.battleship.logic.StatusBar.StatusBar;
 import ichttt.battleship.util.i18n;
 
 import javax.swing.*;
@@ -53,6 +52,10 @@ public class GuiBattleShip implements ActionListener {
     private JMenuBar menuBar;
     private JMenu menuitem1;
     private JMenuItem exit, restart, settings;
+
+    public static boolean getP1() {
+        return p1;
+    }
 
     /**
      * Creates the main User Interface
@@ -137,7 +140,7 @@ public class GuiBattleShip implements ActionListener {
         //Make sure all fields are default
         resetEverything(false);
         ShipRegistry.closeRegistry();
-        StatusBarManager.updatePlacingBar();
+        StatusBarManager.updatePlacingBar(true);
         gui.nextShip(ShipRegistry.getShipList());
     }
 
@@ -233,7 +236,7 @@ public class GuiBattleShip implements ActionListener {
      * @param reopenRegistry if the ShipRegistry should be reset, too
      */
     public static void resetEverything(boolean reopenRegistry) {
-        StatusBarManager.statusBar = new StatusBar();
+        StatusBarManager.flushStatusBars();
         if(reopenRegistry)
             ShipRegistry.reopenRegistry(true);
         isPlacing = true;
