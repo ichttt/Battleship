@@ -6,9 +6,9 @@ A Battleship Version written in Java.
 If you can't compile the GUI form change the main method to look like this:
 
 
-    Thread.setDefaultUncaughtExceptionHandler(new Battleship());
-     Settings settings = new Settings();
-     //Disable this command and uncomment the other two lines if you can't compile the Settings.form
-     //settings.createUIComponents();
-     ShipRegistry.registerShip(new int[]{2,3,4,5});
-     GuiBattleShip.initPlacementGui();
+        LogManager.initFileLogging();
+        i18n.initTranslationSystem();
+        logger.fine("Registering exception handler");
+        Thread.setDefaultUncaughtExceptionHandler(new Battleship());
+        ShipRegistry.registerShip(new Ship(2),new Ship(3),new Ship(4),new Ship(5));
+        GuiBattleShip.initPlacementGui();

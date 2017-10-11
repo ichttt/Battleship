@@ -3,7 +3,7 @@ package ichttt.battleship.logic;
 import ichttt.battleship.Battleship;
 import ichttt.battleship.gui.GuiBattleShip;
 import ichttt.battleship.gui.StatusBarManager;
-import ichttt.battleship.util.i18n;
+import ichttt.battleship.util.I18n;
 
 import javax.swing.*;
 
@@ -18,18 +18,18 @@ public class WinningCondition {
 
     public static void checkWin(int posx, int posy, boolean isP1) {
         if (foundp1 == max&&isP1) {
-            JOptionPane.showMessageDialog(GuiBattleShip.window, i18n.translate("Player") +  " 1 " +  i18n.translate("win"));
+            JOptionPane.showMessageDialog(GuiBattleShip.window, I18n.translate("Player") +  " 1 " +  I18n.translate("win"));
             GuiBattleShip.loadFromBoolean(Battleship.player1);
         }
         else if(foundp2==max&&!isP1) {
-            JOptionPane.showMessageDialog(GuiBattleShip.window, i18n.translate("Player") +  " 2 " +  i18n.translate("win"));
+            JOptionPane.showMessageDialog(GuiBattleShip.window, I18n.translate("Player") +  " 2 " +  I18n.translate("win"));
             GuiBattleShip.loadFromBoolean(Battleship.player2);
         }
         else if(checkShipDown) {
             if(isP1) {
                 int possible = getPossibleShip(Battleship.shipRowsP2, posy, posx);
                 if(checkShipDown(possible, Battleship.shipRowsP2, Battleship.player1hit)) {
-                    JOptionPane.showMessageDialog(GuiBattleShip.window, i18n.translate("ShipDown"));
+                    JOptionPane.showMessageDialog(GuiBattleShip.window, I18n.translate("ShipDown"));
                     StatusBarManager.defeatedShipsP1.add(Battleship.shipRowsP2[possible]);
                     StatusBarManager.updateBattleStatusBar(true);
                 }
@@ -37,7 +37,7 @@ public class WinningCondition {
             else {
                 int possible = getPossibleShip(Battleship.shipRowsP1, posy, posx);
                 if(checkShipDown(possible, Battleship.shipRowsP1, Battleship.player2hit)) {
-                    JOptionPane.showMessageDialog(GuiBattleShip.window, i18n.translate("ShipDown"));
+                    JOptionPane.showMessageDialog(GuiBattleShip.window, I18n.translate("ShipDown"));
                     StatusBarManager.defeatedShipsP2.add(Battleship.shipRowsP1[possible]);
                     StatusBarManager.updateBattleStatusBar(false);
                 }

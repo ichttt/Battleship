@@ -1,4 +1,0 @@
-Only repaint when we are done calculating the BlockStatusHandler
-RepaintManager.currentManager(component).markCompletelyClean(component)
-Implement disallow Ship by Ship
-Basic Logging, i18n

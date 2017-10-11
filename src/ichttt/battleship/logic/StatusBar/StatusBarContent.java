@@ -8,10 +8,11 @@ import com.sun.istack.internal.Nullable;
  */
 public class StatusBarContent {
     public final String identifier;
-    public String content;
     public final int prio;
-    public StatusBarContent(@NotNull String identifier, @Nullable String content,@NotNull int prio) throws IllegalArgumentException {
-        if(prio<0)
+    public String content;
+
+    public StatusBarContent(@NotNull String identifier, @Nullable String content, @NotNull int prio) throws IllegalArgumentException {
+        if (prio < 0)
             throw new IllegalArgumentException("Priority must be positive");
         this.identifier = identifier;
         this.content = content;

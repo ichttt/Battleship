@@ -1,28 +1,21 @@
 package ichttt.battleship.util;
+
 import com.sun.istack.internal.NotNull;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
-import java.util.logging.FileHandler;
-import java.util.logging.Handler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Created by Tobias on 27.12.2016.
  */
-public class i18n {
-    private static final Logger logger = LogManager.getLogger(i18n.class.getName());
+public class I18n {
     private static ResourceBundle messages, fallback;
 
     public static String translate(@NotNull String string) {
         try {
             return messages.getString(string);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             try {
                 return fallback.getString(string);
             } catch (Exception e1) {
@@ -46,13 +39,13 @@ public class i18n {
         try {
             fallback = ResourceBundle.getBundle("Battleship", new Locale("en", "US"));
         } catch (MissingResourceException e) {
-            logger.severe("Could not load en_US. This File should be always available!");
+            LogManager.logger.severe("Could not load en_US. This File should be always available!");
         }
-        logger.fine(String.format("Loading %s_%s", userLanguage, userCountry));
+        LogManager.logger.fine(String.format("Loading %s_%s", userLanguage, userCountry));
         try {
             messages = ResourceBundle.getBundle("Battleship", currentLocale);
         } catch (MissingResourceException e) {
-            logger.warning("Could not load " + currentLocale);
+            LogManager.logger.warning("Could not load " + currentLocale);
         }
     }
 }
