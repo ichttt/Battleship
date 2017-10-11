@@ -22,10 +22,11 @@ public class StatusBarManager {
         statusBarP2 = new StatusBar();
     }
 
-    private static String quietlyRemove(String toRemove, String alternativeMessage) {
+    private static String strip(String toRemove, String alternativeMessage) {
         if (toRemove.length() > 2)
             return toRemove.substring(0, toRemove.length() - 2);
-        else return alternativeMessage;
+        else
+            return alternativeMessage;
     }
 
     private static boolean searchHitTable(int toFind, List<HitTable> toSearch) {
@@ -37,12 +38,13 @@ public class StatusBarManager {
     }
 
     public static void updatePlacingBar(boolean isP1) {
-        String ships = "";
         int shipList[] = ShipRegistry.getShipList();
+        StringBuilder builder = new StringBuilder();
         for (int i = 0; i < ShipRegistry.getShipListSize(); i++) {
-            if (!ShipRegistry.isPlaced(i)) ships += shipList[i] + ", ";
+            if (!ShipRegistry.isPlaced(i))
+                builder.append(shipList[i]).append(", ");
         }
-        ships = quietlyRemove(ships, "Keine weiteren Schiffe vorhanden!");
+        String ships = strip(builder.toString(), "Keine weiteren Schiffe vorhanden!");
 
         if (isP1) {
             statusBarP1.addOrChangeContent(new StatusBarContent("ships", "Verfügbare Schiffe: " + ships, 10));
@@ -56,26 +58,28 @@ public class StatusBarManager {
     }
 
     public static void updateBattleStatusBar(boolean isP1) {
-        String ships = "";
+        StringBuilder shipsBuilder = new StringBuilder();
         int[] shipList = ShipRegistry.getShipList();
-        String nonShips = "";
+        StringBuilder nonShipsBuilder = new StringBuilder();
         if (isP1) {
             for (HitTable hit : defeatedShipsP1) {
-                ships += hit.actualSize() + ", ";
+                shipsBuilder.append(hit.actualSize()).append(", ");
             }
             for (int ship : shipList) {
-                if (!searchHitTable(ship, defeatedShipsP1)) nonShips += ship + ", ";
+                if (!searchHitTable(ship, defeatedShipsP1))
+                    nonShipsBuilder.append(ship).append(", ");
             }
         } else {
             for (HitTable hit : defeatedShipsP2) {
-                ships += hit.actualSize() + ", ";
+                shipsBuilder.append(hit.actualSize()).append(", ");
             }
             for (int ship : shipList) {
-                if (!searchHitTable(ship, defeatedShipsP2)) nonShips += ship + ", ";
+                if (!searchHitTable(ship, defeatedShipsP2))
+                    nonShipsBuilder.append(ship).append(", ");
             }
         }
-        ships = quietlyRemove(ships, "Noch kein Schiff versenkt!");
-        nonShips = quietlyRemove(nonShips, "Alle Schiffe versenkt!");
+        String ships = strip(shipsBuilder.toString(), "Noch kein Schiff versenkt!");
+        String nonShips = strip(nonShipsBuilder.toString(), "Alle Schiffe versenkt!");
         if (isP1) {
             statusBarP1.addOrChangeContent(new StatusBarContent("shipsDown", "Versenkte Schiffe: " + ships, 10));
             statusBarP1.addOrChangeContent(new StatusBarContent("shipsAvailable", "Noch nicht versenkte Schiffe: " + nonShips, 11));

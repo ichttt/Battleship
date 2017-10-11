@@ -6,7 +6,6 @@ import ichttt.battleship.util.I18n;
 import ichttt.battleship.util.LogManager;
 
 import javax.swing.*;
-import java.util.logging.Logger;
 
 /**
  * Created by Tobias on 16.11.2016.
@@ -16,8 +15,8 @@ public class Battleship implements Thread.UncaughtExceptionHandler {
     public static int horizontalLength, verticalLength;
     public static boolean[][] player1, player2;
     //X=Hit;O=No hit;null= not tested
-    public static String[][] player1hit = new String[verticalLength][horizontalLength];
-    public static String[][] player2hit = new String[verticalLength][horizontalLength];
+    public static EnumHitResult[][] player1hit = new EnumHitResult[verticalLength][horizontalLength];
+    public static EnumHitResult[][] player2hit = new EnumHitResult[verticalLength][horizontalLength];
     public static HitTable[] shipRowsP1, shipRowsP2;
 
     public static void main(String[] args) {
@@ -42,7 +41,8 @@ public class Battleship implements Thread.UncaughtExceptionHandler {
         boolean[][] dest = new boolean[toconv.length][toconv[0].length];
         for (int i = 0; i < toconv.length; i++) {
             for (int i2 = 0; i2 < toconv[0].length; i2++) {
-                if (toconv[i][i2].getText().equals("X")) dest[i][i2] = true;
+                if (toconv[i][i2].getText().equals("X"))
+                    dest[i][i2] = true;
             }
         }
         return dest;

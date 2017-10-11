@@ -1,6 +1,7 @@
 package ichttt.battleship.gui;
 
 import ichttt.battleship.Battleship;
+import ichttt.battleship.EnumHitResult;
 import ichttt.battleship.logic.ShipRegistry;
 import ichttt.battleship.logic.WinningCondition;
 import ichttt.battleship.util.I18n;
@@ -124,17 +125,21 @@ public class GuiBattleShip implements ActionListener {
         for (int i = 0; i < Battleship.verticalLength; i++) {
             for (int i2 = 0; i2 < Battleship.horizontalLength; i2++) {
                 if (isP1) {
-                    if (Battleship.player1hit[i][i2] != null) {
-                        if (Battleship.player1hit[i][i2].equals("X")) fields[i][i2].setBackground(new Color(0, 255, 0));
-                        else fields[i][i2].setBackground(new Color(175, 0, 0));
-                        fields[i][i2].setText(Battleship.player1hit[i][i2]);
+                    if (Battleship.player1hit[i][i2] != EnumHitResult.NO_TESTED) {
+                        if (Battleship.player1hit[i][i2] == EnumHitResult.HIT)
+                            fields[i][i2].setBackground(new Color(0, 255, 0));
+                        else
+                            fields[i][i2].setBackground(new Color(175, 0, 0));
+                        fields[i][i2].setText(Battleship.player1hit[i][i2].text);
                         fields[i][i2].setEnabled(false);
                     }
                 } else {
                     if (Battleship.player2hit[i][i2] != null) {
-                        if (Battleship.player2hit[i][i2].equals("X")) fields[i][i2].setBackground(new Color(0, 255, 0));
-                        else fields[i][i2].setBackground(new Color(175, 0, 0));
-                        fields[i][i2].setText(Battleship.player2hit[i][i2]);
+                        if (Battleship.player2hit[i][i2] == EnumHitResult.HIT)
+                            fields[i][i2].setBackground(new Color(0, 255, 0));
+                        else
+                            fields[i][i2].setBackground(new Color(175, 0, 0));
+                        fields[i][i2].setText(Battleship.player2hit[i][i2].text);
                         fields[i][i2].setEnabled(false);
                     }
                 }
@@ -166,8 +171,8 @@ public class GuiBattleShip implements ActionListener {
         isPlacing = true;
         p1 = true;
         BlockStatusHandler.clearEntireBlockList();
-        Battleship.player1hit = new String[Battleship.verticalLength][Battleship.horizontalLength];
-        Battleship.player2hit = new String[Battleship.verticalLength][Battleship.horizontalLength];
+        Battleship.player1hit = new EnumHitResult[Battleship.verticalLength][Battleship.horizontalLength];
+        Battleship.player2hit = new EnumHitResult[Battleship.verticalLength][Battleship.horizontalLength];
         BlockStatusHandler.changeBlockStatus(false, false);
         clearTextButtons();
         WinningCondition.foundp2 = 0;
@@ -399,13 +404,13 @@ public class GuiBattleShip implements ActionListener {
                     if (p1) {
                         if (Battleship.player2[posy][posx]) {
                             fields[posy][posx].setText("X");
-                            Battleship.player1hit[posy][posx] = "X";
+                            Battleship.player1hit[posy][posx] = EnumHitResult.HIT;
                             fields[posy][posx].setBackground(new Color(0, 255, 0));
                             WinningCondition.foundp1++;
                             WinningCondition.checkWin(posx, posy, p1);
                         } else {
                             fields[posy][posx].setText("O");
-                            Battleship.player1hit[posy][posx] = "O";
+                            Battleship.player1hit[posy][posx] = EnumHitResult.NO_HIT;
                             p1 = !p1;
                             fields[posy][posx].setBackground(new Color(175, 0, 0));
                             JOptionPane.showMessageDialog(window, I18n.translate("NoHit") + " " + I18n.translate("Player") + " 2" + I18n.translate("YourTurn"));
@@ -416,13 +421,13 @@ public class GuiBattleShip implements ActionListener {
                     } else {
                         if (Battleship.player1[posy][posx]) {
                             fields[posy][posx].setText("X");
-                            Battleship.player2hit[posy][posx] = "X";
+                            Battleship.player2hit[posy][posx] = EnumHitResult.HIT;
                             fields[posy][posx].setBackground(new Color(0, 255, 0));
                             WinningCondition.foundp2++;
                             WinningCondition.checkWin(posx, posy, p1);
                         } else {
                             fields[posy][posx].setText("O");
-                            Battleship.player2hit[posy][posx] = "O";
+                            Battleship.player2hit[posy][posx] = EnumHitResult.NO_HIT;
                             p1 = !p1;
                             fields[posy][posx].setBackground(new Color(175, 0, 0));
                             JOptionPane.showMessageDialog(window, I18n.translate("NoHit") + " " + I18n.translate("Player") + " 1" + I18n.translate("YourTurn"));

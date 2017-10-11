@@ -1,6 +1,7 @@
 package ichttt.battleship.logic;
 
 import ichttt.battleship.Battleship;
+import ichttt.battleship.EnumHitResult;
 import ichttt.battleship.gui.GuiBattleShip;
 import ichttt.battleship.gui.StatusBarManager;
 import ichttt.battleship.util.I18n;
@@ -57,13 +58,13 @@ public class WinningCondition {
         return -1;
     }
 
-    private static boolean checkShipDown(int possibleShip, HitTable[] shipRows, String[][] playerhit) {
+    private static boolean checkShipDown(int possibleShip, HitTable[] shipRows, EnumHitResult[][] playerhit) {
         if(possibleShip !=-1) {
             for(int i = 0; i< shipRows[possibleShip].size(); i++) {
                 if(shipRows[possibleShip].posx[i]==-1&& shipRows[possibleShip].posy[i]==-1)
                     break;
                 if(playerhit[shipRows[possibleShip].posy[i]][shipRows[possibleShip].posx[i]]==null||
-                        playerhit[shipRows[possibleShip].posy[i]][shipRows[possibleShip].posx[i]].equals("O")) {
+                        playerhit[shipRows[possibleShip].posy[i]][shipRows[possibleShip].posx[i]] == EnumHitResult.NO_HIT) {
                     return false;
                 }
             }
