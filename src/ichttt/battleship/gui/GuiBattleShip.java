@@ -125,7 +125,7 @@ public class GuiBattleShip implements ActionListener {
         for (int i = 0; i < Battleship.verticalLength; i++) {
             for (int i2 = 0; i2 < Battleship.horizontalLength; i2++) {
                 if (isP1) {
-                    if (Battleship.player1hit[i][i2] != EnumHitResult.NO_TESTED) {
+                    if (Battleship.player1hit[i][i2] != null) {
                         if (Battleship.player1hit[i][i2] == EnumHitResult.HIT)
                             fields[i][i2].setBackground(new Color(0, 255, 0));
                         else
@@ -325,11 +325,10 @@ public class GuiBattleShip implements ActionListener {
         }
         if (!setSomething) {
             //Store to Player
-            if (p1) {
+            if (p1)
                 finishP1();
-            } else {
+            else
                 finishP2();
-            }
         } else {
             chooseShip.add(shipPanel);
             chooseShip.setModal(true);

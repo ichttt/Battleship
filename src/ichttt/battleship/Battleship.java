@@ -20,7 +20,7 @@ public class Battleship implements Thread.UncaughtExceptionHandler {
     public static HitTable[] shipRowsP1, shipRowsP2;
 
     public static void main(String[] args) {
-        LogManager.initFileLogging();
+        LogManager.initFileLogging(args.length != 1 || Boolean.parseBoolean(args[0]));
         I18n.initTranslationSystem();
         LogManager.logger.fine("Registering exception handler");
         Thread.setDefaultUncaughtExceptionHandler(new Battleship());

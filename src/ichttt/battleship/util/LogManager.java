@@ -13,7 +13,11 @@ import java.util.logging.Logger;
 public class LogManager {
     public static final Logger logger = Logger.getLogger("BATTLESHIP");
 
-    public static void initFileLogging() {
+    public static void initFileLogging(boolean logToFile) {
+        if (!logToFile) {
+            logger.info("Logger started without file saving");
+            return;
+        }
         Handler fileHandler;
         String userdir = System.getProperty("user.home");
 

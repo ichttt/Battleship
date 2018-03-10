@@ -1,7 +1,7 @@
 package ichttt.battleship;
 
 public enum EnumHitResult {
-    HIT("X"), NO_HIT("O"), NO_TESTED("");
+    HIT("X"), NO_HIT("O");
 
     public String text;
 
